@@ -89,7 +89,8 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'daily_fresh',
-        'HOST': '118.31.66.190',
+        # 'HOST': '118.31.66.190',
+        'HOST': 'localhost',
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'WryQuickFS@22',
@@ -136,8 +137,23 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
 TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
     'width': 600,
     'height': 400,
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 465 # 这里不用25，linux不行，必须用ssl才能发出去
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'wangruoyu4321@163.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'YWSOYOPGHZVWMEYU'
+#收件人看到的发件人
+EMAIL_FROM = '快客金服<wangruoyu4321@163.com>'
+EMAIL_USE_SSL = True

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  {% load static %}
+  <h1>恭喜您注册成功，请在邮箱点击激活链接后去登录</h1>
+  <strong>已经在邮件中激活, <a href="{% url 'user:login' %}">马上登录</a></strong>
+</body>
+</html>
