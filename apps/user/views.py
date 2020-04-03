@@ -20,6 +20,9 @@ class LoginView(View):
 
 class RegisterView(View):
     def get(self, request):
+        # print(request.scheme)
+        # print('request.META-HTTP_HOST------->')
+        # print(request.META['HTTP_HOST'])
         return render(request, 'user/register.html')
 
     def post(self, request):
@@ -54,9 +57,10 @@ class RegisterView(View):
         info = {'confirm': reg_user.id}
         token = serializer.dumps(info)
         token = token.decode()
+        host = request.META['HTTP_HOST']
 
         # send_register_active_mail([reg_data['email']], reg_user.username, token)
-        send_register_active_mail.delay([reg_data['email']], reg_user.username, token)
+        send_register_active_mail.delay([reg_data['email']], reg_user.username, token, host)
 
         return render(request, 'user/reg_success.html')
 

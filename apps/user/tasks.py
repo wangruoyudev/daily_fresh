@@ -9,7 +9,12 @@ import time
 
 
 @shared_task
-def send_register_active_mail(receiver_list, user_name, token):
+def add_test(num1, num2):
+    print(num1+num2)
+
+
+@shared_task
+def send_register_active_mail(receiver_list, user_name, token, host):
     print('延时前')
     time.sleep(5)
     print('延时后')
@@ -18,9 +23,11 @@ def send_register_active_mail(receiver_list, user_name, token):
     sender = settings.EMAIL_FROM
     receiver = receiver_list
     html_message = '''<h1>%s, 欢迎您成为快客金服的注册会员</h1><p>请点击下面的链接激活您的账户</p>
-                            <p><a href="http://118.31.66.190:8083%s">http://118.31.66.190:8083%s</a></p>''' % (
+                            <p><a href="http://%s%s">http://%s%s</a></p>''' % (
         user_name,
+        host,
         reverse('user:active_account', args=[token]),
+        host,
         reverse('user:active_account', args=[token]))
 
     print(sender)
