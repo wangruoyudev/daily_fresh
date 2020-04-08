@@ -64,7 +64,7 @@ AUTH_USER_MODEL = 'user.User'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'apps/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -157,3 +157,20 @@ EMAIL_HOST_PASSWORD = 'YWSOYOPGHZVWMEYU'
 #收件人看到的发件人
 EMAIL_FROM = '快客金服<wangruoyu4321@163.com>'
 EMAIL_USE_SSL = True
+
+# 设置使用redis作为缓存
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/2",  # 使用2号数据库作为缓存
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 使用上面设置的缓存后端作为session的存储后端
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+LOGIN_URL = '/user/login'
