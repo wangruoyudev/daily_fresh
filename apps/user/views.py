@@ -172,7 +172,7 @@ class TestView(View):
     def get(self, request):
         pic = GoodsType.objects.get(name='云图片测试')
         print('===>pic-type:', type(pic))
-        print('===>pic:', pic)
+        print('===>pic:', pic) # 返回的是__str__
         print('===>pic-image-type:', type(pic.image))
         return render(request, 'user/test.html', {'pic': pic})
 
