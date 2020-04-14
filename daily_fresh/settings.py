@@ -41,10 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce',
-    'cart',
-    'goods',
-    'order',
-    'user',
+    # 'apps.cart.apps.CartConfig',
+    # 'apps.goods.apps.GoodsConfig',
+    # 'apps.order.apps.OrderConfig',
+    # 'apps.user.apps.UserConfig',
+    'apps.user',
+    'apps.cart',
+    'apps.goods',
+    'apps.order',
 ]
 
 MIDDLEWARE = [
@@ -174,3 +178,10 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 LOGIN_URL = '/user/login'
+
+
+DEFAULT_FILE_STORAGE = 'daily_fresh.Fdfs_storage.FdfsStorage'
+CUSTOM_STORAGE_OPTIONS = {
+    'client_config': os.path.join(BASE_DIR, 'daily_fresh/client.conf'),
+    'nginx_domain': 'http://test.quickfs.cn/',
+}

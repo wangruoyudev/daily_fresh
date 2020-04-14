@@ -70,3 +70,15 @@ class TestObject(MixinView, View, ViewSon):
 
 TestObject.as_view()
 print(TestObject.__mro__)
+
+
+str1 = 'fsdfds1.sfs.fsd'
+ls = str.split(str1, '.')
+if len(ls) > 1:
+    print(ls[-1])
+else:
+    print('null')
+
+
+
+

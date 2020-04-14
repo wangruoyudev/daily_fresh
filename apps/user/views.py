@@ -1,6 +1,7 @@
 from django.shortcuts import render, reverse, redirect
 from django.views.generic import View
-from .models import User
+from apps.user.models import User
+from apps.goods.models import GoodsType
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
@@ -169,6 +170,11 @@ class UserAddress(LoginRequiredMixin, View):
 
 class TestView(View):
     def get(self, request):
-        return render(request, 'user/user_center_site.html')
+        pic = GoodsType.objects.get(name='云图片测试')
+        print('===>pic-type:', type(pic))
+        print('===>pic:', pic)
+        print('===>pic-image-type:', type(pic.image))
+        return render(request, 'user/test.html', {'pic': pic})
+
 
 
