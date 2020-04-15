@@ -42,7 +42,7 @@
 		</div>
 		<div class="adv fl">
 		{% for goods_promotion in goods_promotion_list %}
-			<a href="#"><img src="{{goods_promotion.image.url}}"></a>
+			<a href="{{goods_promotion.url}}"><img src="{{goods_promotion.image.url}}"></a>
 		{% endfor %}
 <!--			<a href="#"><img src="{% static 'images/adv01.jpg' %}"></a>-->
 <!--			<a href="#"><img src="{% static 'images/adv02.jpg' %}"></a>-->
