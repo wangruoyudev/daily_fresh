@@ -79,6 +79,9 @@ if len(ls) > 1:
 else:
     print('null')
 
+dic1 = dict()
+dic1.update(a='2121212')
+print(dic1)
 
 
 

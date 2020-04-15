@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import include
-
+from apps.user.views import IndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')), # 富文本编辑器
@@ -24,4 +24,5 @@ urlpatterns = [
     path('goods/', include('goods.urls')),
     path('order/', include('order.urls')),
     path('user/', include('user.urls')),
+    re_path(r'^/?$', IndexView.as_view()),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect
 from django.views.generic import View
 from apps.user.models import User
-from apps.goods.models import GoodsType
+from apps.goods.models import GoodsType, IndexGoodsBanner
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
@@ -141,7 +141,10 @@ class ActiveAccount(LoginRequiredMixin, View):
 
 class IndexView(View):
     def get(self, request):
-        return render(request, 'user/index.html')
+        goods_type_list = GoodsType.objects.all()
+        goods_banner_list = IndexGoodsBanner.objects.all().order_by('index')
+        return render(request, 'user/index.html', {'goods_type_list': goods_type_list,
+                                                   'goods_banner_list': goods_banner_list})
 
 
 @login_required(login_url='/user/register')
