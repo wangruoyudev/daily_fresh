@@ -131,7 +131,7 @@ class IndexTypeGoodsBanner(BaseModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.type.name
+        return self.sku.name
 
 
 class IndexPromotionBanner(BaseModel):
