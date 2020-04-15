@@ -41,8 +41,11 @@
 			<ul class="points"></ul>
 		</div>
 		<div class="adv fl">
-			<a href="#"><img src="{% static 'images/adv01.jpg' %}"></a>
-			<a href="#"><img src="{% static 'images/adv02.jpg' %}"></a>
+		{% for goods_promotion in goods_promotion_list %}
+			<a href="#"><img src="{{goods_promotion.image.url}}"></a>
+		{% endfor %}
+<!--			<a href="#"><img src="{% static 'images/adv01.jpg' %}"></a>-->
+<!--			<a href="#"><img src="{% static 'images/adv02.jpg' %}"></a>-->
 		</div>
 	</div>
 
