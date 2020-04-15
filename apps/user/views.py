@@ -11,6 +11,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django_redis import get_redis_connection
 
 
 class LoginView(View):
@@ -151,9 +152,15 @@ class IndexView(View):
             goods_type.type_title_list = type_title_list
             goods_type.type_image_list = type_image_list
 
+        cart_count = 0
+        if request.user.is_authenticated:
+            con = get_redis_connection('default')
+            cart_key = 'cart_id%s' % request.user.id
+            cart_count = con.hlen(cart_key)
         return render(request, 'user/index.html', {'goods_type_list': goods_type_list,
                                                    'goods_banner_list': goods_banner_list,
-                                                   'goods_promotion_list': goods_promotion_list})
+                                                   'goods_promotion_list': goods_promotion_list,
+                                                   'cart_count': cart_count})
 
 
 @login_required(login_url='/user/register')
