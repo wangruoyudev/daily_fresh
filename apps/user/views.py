@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect
 from django.views.generic import View
 from apps.user.models import User
-from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner
+from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
@@ -144,6 +144,13 @@ class IndexView(View):
         goods_type_list = GoodsType.objects.all()
         goods_banner_list = IndexGoodsBanner.objects.all().order_by('index')
         goods_promotion_list = IndexPromotionBanner.objects.all().order_by('-index')
+
+        for goods_type in goods_type_list:
+            type_title_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=0).order_by('index')
+            type_image_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=1).order_by('index')
+            goods_type.type_title_list = type_title_list
+            goods_type.type_image_list = type_image_list
+
         return render(request, 'user/index.html', {'goods_type_list': goods_type_list,
                                                    'goods_banner_list': goods_banner_list,
                                                    'goods_promotion_list': goods_promotion_list})
