@@ -149,6 +149,7 @@ class IndexView(View):
         context = cache.get('index_cache')
 
         if context is None:  # 缓存不存在或者已过期
+            print('缓存不存在，重新读取数据库设置缓存')
             goods_type_list = GoodsType.objects.all()
             goods_banner_list = IndexGoodsBanner.objects.all().order_by('index')
             goods_promotion_list = IndexPromotionBanner.objects.all().order_by('-index')
