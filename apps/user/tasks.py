@@ -36,7 +36,7 @@ def create_static_index_html(request):
                'cart_count': 0}
     index_content = template.render(context, request)
 
-    with open(os.path.join(settings.BASE_DIR, 'apps/user/templates/user/index_static.html'), 'wb') as f:
+    with open(os.path.join(settings.BASE_DIR, 'apps/user/templates/user/index_static.html'), 'w') as f:
         f.write(index_content)
     print('生成完毕')
 
