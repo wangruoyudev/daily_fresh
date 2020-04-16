@@ -5,5 +5,5 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class GoodsDetail(LoginRequiredMixin, View):
-    def get(self, rquest):
-        return render(rquest, 'goods/detail.html')
+    def get(self, request):
+        return render(request, 'goods/detail.html')
