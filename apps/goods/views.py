@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 
 
-class GoodsDetail(LoginRequiredMixin, View):
+class GoodsDetailView(LoginRequiredMixin, View):
     def get(self, request):
-        # return render(request, 'user/index.html')
-        return HttpResponse('detail')
+        return render(request, 'goods/detail.html')
