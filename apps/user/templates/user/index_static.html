@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}天天生鲜{% endblock title %}
+{% block topfiles %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/slide.js' %}"></script>
+{% endblock topfiles %}
+{% block body %}
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">有机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			{% for goods_type in goods_type_list %}
+				<li><a href="#" class="{{goods_type.logo}}">{{goods_type.name}}</a></li>
+			{% endfor %}
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+			{% for goods_banner in goods_banner_list %}
+				<li><img src="{{goods_banner.image.url}}" alt="幻灯片"></li>
+			{% endfor %}
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+		{% for goods_promotion in goods_promotion_list %}
+			<a href="{{goods_promotion.url}}"><img src="{{goods_promotion.image.url}}"></a>
+		{% endfor %}
+		</div>
+	</div>
+{% for goods_type in goods_type_list %}
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model0{{goods_type.id}}">{{goods_type.name}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+			{% for type_title in goods_type.type_title_list %}
+				<a href="#">{{type_title.sku.name}}</a>
+			{% endfor %}
+			</div>
+			<a href="#" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="{{goods_type.image.url}}"></div>
+			<ul class="goods_list fl">
+			{% for type_image in goods_type.type_image_list %}
+				<li>
+					<h4><a href="#">{{type_image.sku.name}}</a></h4>
+					<a href="#"><img src="{{type_image.sku.image.url}}"></a>
+					<div class="prize">¥ {{type_image.sku.price}}</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock body %}
