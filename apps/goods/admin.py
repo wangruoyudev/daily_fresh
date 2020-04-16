@@ -10,11 +10,11 @@ class IndexTypeGoodsAdmin(admin.ModelAdmin):
     '''有保存或者删除首页的数据，就重新生成静态页面'''
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        create_static_index_html.delay(request)
+        create_static_index_html.delay(None)
 
     def delete_model(self, request, obj):
         super().delete_model(request, obj)
-        create_static_index_html.delay(request)
+        create_static_index_html.delay(None)
 
 
 admin.site.register(GoodsType)
