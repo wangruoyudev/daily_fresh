@@ -38,7 +38,7 @@ def create_static_index_html(request):
                'not_static_html': False}
     index_content = template.render(context, request)
 
-    with open(os.path.join(settings.BASE_DIR, 'static/index_static.html'), 'w') as f:
+    with open(os.path.join(settings.BASE_DIR, 'templates/index_static.html'), 'w') as f:
         f.write(index_content)
     print('生成完毕')
 
