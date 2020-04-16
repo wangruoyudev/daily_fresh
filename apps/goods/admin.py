@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.core.cache import cache
 from .models import GoodsImage, GoodsType, Goods, GoodsSKU, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 # Register your models here.
 from apps.user.tasks import create_static_index_html
@@ -11,10 +11,11 @@ class IndexTypeGoodsAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         create_static_index_html.delay(None)
-
+        cache.delete('index_cache')
     def delete_model(self, request, obj):
         super().delete_model(request, obj)
         create_static_index_html.delay(None)
+        cache.delete('index_cache')
 
 
 admin.site.register(GoodsType)
