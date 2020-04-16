@@ -16,6 +16,7 @@ import os
 def add_test(num1, num2):
     print(num1+num2)
 
+
 @shared_task
 def create_static_index_html(request):
     print('执行生成静态页面的任务')

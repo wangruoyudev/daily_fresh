@@ -33,5 +33,4 @@ class FdfsStorage(Storage):
         return False
 
     def url(self, name):
-        print('====>url-name:', name)
         return self.nginx_domain + name

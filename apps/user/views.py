@@ -13,7 +13,6 @@ from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_redis import get_redis_connection
 
-
 class LoginView(View):
 
     def get(self, request):
