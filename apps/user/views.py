@@ -6,7 +6,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
 from django.http import HttpResponse, HttpRequest
-from .tasks import send_register_active_mail
+from apps.user.tasks import send_register_active_mail
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
