@@ -6,4 +6,4 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class GoodsDetail(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'goods/detail.html')
+        return render(request, 'user/index.html')
