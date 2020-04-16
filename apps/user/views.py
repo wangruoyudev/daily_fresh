@@ -146,15 +146,22 @@ class IndexView(View):
             return render(request, 'index_static.html')
 
         print('====>获取查询数据库的首页')
-        goods_type_list = GoodsType.objects.all()
-        goods_banner_list = IndexGoodsBanner.objects.all().order_by('index')
-        goods_promotion_list = IndexPromotionBanner.objects.all().order_by('-index')
+        context = cache.get('index_cache')
 
-        for goods_type in goods_type_list:
-            type_title_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=0).order_by('index')
-            type_image_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=1).order_by('index')
-            goods_type.type_title_list = type_title_list
-            goods_type.type_image_list = type_image_list
+        if context is None:  # 缓存不存在或者已过期
+            goods_type_list = GoodsType.objects.all()
+            goods_banner_list = IndexGoodsBanner.objects.all().order_by('index')
+            goods_promotion_list = IndexPromotionBanner.objects.all().order_by('-index')
+
+            for goods_type in goods_type_list:
+                type_title_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=0).order_by('index')
+                type_image_list = IndexTypeGoodsBanner.objects.filter(type=goods_type, display_type=1).order_by('index')
+                goods_type.type_title_list = type_title_list
+                goods_type.type_image_list = type_image_list
+            context = {'goods_type_list': goods_type_list,
+                       'goods_banner_list': goods_banner_list,
+                       'goods_promotion_list': goods_promotion_list}
+            cache.set('index_cache', context, 3600)  # 缓存一个小时
 
         cart_count = 0
         if request.user.is_authenticated: #  读取缓存中购物车的记录
@@ -162,11 +169,9 @@ class IndexView(View):
             cart_key = 'cart_id%s' % request.user.id
             cart_count = con.hlen(cart_key)
 
-        return render(request, 'user/index.html', {'goods_type_list': goods_type_list,
-                                                   'goods_banner_list': goods_banner_list,
-                                                   'goods_promotion_list': goods_promotion_list,
-                                                   'cart_count': cart_count,
-                                                   'not_static_html': True})
+        context.update(cart_count=cart_count, not_static_html=True)
+
+        return render(request, 'user/index.html', context)
 
 
 
