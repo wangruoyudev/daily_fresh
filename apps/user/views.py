@@ -165,7 +165,8 @@ class IndexView(View):
         return render(request, 'user/index.html', {'goods_type_list': goods_type_list,
                                                    'goods_banner_list': goods_banner_list,
                                                    'goods_promotion_list': goods_promotion_list,
-                                                   'cart_count': cart_count})
+                                                   'cart_count': cart_count,
+                                                   'not_static_html': True})
 
 
 

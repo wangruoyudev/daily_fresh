@@ -34,7 +34,8 @@ def create_static_index_html(request):
     context = {'goods_type_list': goods_type_list,
                'goods_banner_list': goods_banner_list,
                'goods_promotion_list': goods_promotion_list,
-               'cart_count': 0}
+               'cart_count': 0,
+               'not_static_html': False}
     index_content = template.render(context, request)
 
     with open(os.path.join(settings.BASE_DIR, 'static/index_static.html'), 'w') as f:
