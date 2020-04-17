@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import View
 # from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
@@ -6,6 +6,11 @@ from django.http import HttpResponse
 from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django.core.cache import cache
 from django_redis import get_redis_connection
+
+
+class RedirectIndexView(View):
+    def get(self, request):
+        return redirect(reverse('goods:index'))
 
 
 class IndexView(View):
@@ -49,11 +54,12 @@ class GoodsDetailView(View):
         print('===>goods_id:', goods_id)
         goods_sku = GoodsSKU.objects.get(id=goods_id)
         new_goods_list = GoodsSKU.objects.all().exclude(id=goods_id).order_by('-create_time')[:2]
+        type_goods_list = GoodsType.objects.all().order_by('id')
         goods_spu = goods_sku.goods
         context = {
             'goods_sku': goods_sku,
             'new_goods_list': new_goods_list,
-            'goods_spu': goods_spu,
+            'type_goods_list': type_goods_list,
         }
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录

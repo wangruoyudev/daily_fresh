@@ -3,7 +3,7 @@
 <div class="breadcrumb">
 		<a href="#">全部分类</a>
 		<span>></span>
-		<a href="#">新鲜水果</a>
+		<a href="#">{{goods_sku.type.name}}</a>
 		<span>></span>
 		<a href="#">商品详情</a>
 	</div>
@@ -59,7 +59,7 @@
 			<div class="tab_content">
 				<dl>
 					<dt>商品详情：</dt>
-					<dd>{{goods_spu.detail|safe}}</dd>
+					<dd>{{goods_sku.goods.detail|safe}}</dd>
 				</dl>
 			</div>
 
