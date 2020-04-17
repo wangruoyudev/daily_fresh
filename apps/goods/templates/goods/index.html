@@ -60,8 +60,8 @@
 			<ul class="goods_list fl">
 			{% for type_image in goods_type.type_image_list %}
 				<li>
-					<h4><a href="#">{{type_image.sku.name}}</a></h4>
-					<a href="#"><img src="{{type_image.sku.image.url}}"></a>
+					<h4><a href="{% url 'goods:detail' type_image.sku.id %}">{{type_image.sku.name}}</a></h4>
+					<a href="{% url 'goods:detail' type_image.sku.id %}"><img src="{{type_image.sku.image.url}}"></a>
 					<div class="prize">¥ {{type_image.sku.price}}</div>
 				</li>
 			{% endfor %}
