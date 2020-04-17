@@ -48,8 +48,8 @@ class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
         goods_sku = GoodsSKU.objects.get(id=goods_id)
-        new_goods_list = GoodsSKU.objects.all().order_by('-create_time')[:2]
-        goods_spu = goods_sku.goods.detail
+        new_goods_list = GoodsSKU.objects.all().exclude(id=goods_id).order_by('-create_time')[:2]
+        goods_spu = goods_sku.goods
         context = {
             'goods_sku': goods_sku,
             'new_goods_list': new_goods_list,
