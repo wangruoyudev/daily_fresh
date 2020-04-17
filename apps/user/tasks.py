@@ -30,7 +30,7 @@ def create_static_index_html(request):
         goods_type.type_title_list = type_title_list
         goods_type.type_image_list = type_image_list
 
-    template = loader.get_template('user/index.html')
+    template = loader.get_template('goods/index.html')
     context = {'goods_type_list': goods_type_list,
                'goods_banner_list': goods_banner_list,
                'goods_promotion_list': goods_promotion_list,

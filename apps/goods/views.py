@@ -41,7 +41,7 @@ class IndexView(View):
 
         context.update(cart_count=cart_count)
 
-        return render(request, 'user/index.html', context)
+        return render(request, 'goods/index.html', context)
 
 
 class GoodsDetailView(View):
