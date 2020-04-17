@@ -47,4 +47,10 @@ class IndexView(View):
 class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
+        goods_sku = GoodsSKU.objects.get(id=goods_id)
+
+        context = {
+            'goods_sku': goods_sku,
+
+        }
         return render(request, 'goods/detail.html')
