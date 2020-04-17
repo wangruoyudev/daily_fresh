@@ -53,4 +53,4 @@ class GoodsDetailView(View):
             'goods_sku': goods_sku,
 
         }
-        return render(request, 'goods/detail.html')
+        return render(request, 'goods/detail.html', context)
