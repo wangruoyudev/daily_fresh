@@ -48,9 +48,19 @@ class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
         goods_sku = GoodsSKU.objects.get(id=goods_id)
-
+        new_goods_list = GoodsSKU.objects.all().order_by('-create_time')[:2]
+        goods_spu = goods_sku.goods.detail
         context = {
             'goods_sku': goods_sku,
-
+            'new_goods_list': new_goods_list,
+            'goods_spu': goods_spu,
         }
+        cart_count = 0
+        if request.user.is_authenticated:  # 读取缓存中购物车的记录
+            con = get_redis_connection('default')
+            cart_key = 'cart_id%s' % request.user.id
+            cart_count = con.hlen(cart_key)
+
+        context.update(cart_count=cart_count)
+
         return render(request, 'goods/detail.html', context)
