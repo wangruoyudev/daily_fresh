@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect
 from django.views.generic import View
 from apps.user.models import User
-from apps.goods.models import GoodsType
+from apps.goods.models import GoodsType, GoodsSKU
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
@@ -11,6 +11,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django_redis import get_redis_connection
 
 class LoginView(View):
 
@@ -150,7 +151,21 @@ class UserInfo(LoginRequiredMixin, View):
     # redirect_field_name = 'redirect_to' # 改变参数的默认key值，默认是next
     def get(self, request):
         print('==>user:', request.user, type(request.user))
-        return render(request, 'user/user_center_info.html', {'page': 'info'})
+
+        con = get_redis_connection('default')
+        recent_list = con.lrange('user_browse_%s' % request.user.id, 0, -1)
+        print('====>recent_list:', recent_list)
+        goods_recently_list = list()
+        for goods_id in recent_list:
+            try:
+                goods_sku = GoodsSKU.objects.get(id=goods_id)
+                goods_recently_list.push(goods_sku)
+            except GoodsSKU.DoesNotExist:
+                print('===>not exist, continue')
+                continue
+
+        return render(request, 'user/user_center_info.html', {'page': 'info',
+                                                              'goods_recently_list': goods_recently_list})
 
 
 class UserOrder(LoginRequiredMixin, View):

@@ -71,8 +71,11 @@ class GoodsDetailView(View):
             cart_count = con.hlen(cart_key)
 
             # 添加最近浏览，用sku的id做value
-            con.lrem(request.user.id, 0, goods_id) # 先删除之前列表里面的goods id
-            con.lpush(request.user.id,  goods_id) # 再从左侧添加添加goods id
+            browse_key = 'user_browse_%s' % request.user.id
+            con.lrem(browse_key, 0, goods_id) # 先删除之前列表里面的goods id
+            con.lpush(browse_key,  goods_id) # 再从左侧添加添加goods id
+            if con.llen(browse_key) > 5:
+                con.rpop(browse_key)
 
         context.update(cart_count=cart_count)
 
