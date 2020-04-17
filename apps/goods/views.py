@@ -52,7 +52,10 @@ class IndexView(View):
 class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
-        goods_sku = GoodsSKU.objects.get(id=goods_id)
+        try:
+            goods_sku = GoodsSKU.objects.get(id=goods_id)
+        except GoodsSKU.DoseNotExist:
+            return redirect(reverse('goods:index'))
         new_goods_list = GoodsSKU.objects.all().exclude(id=goods_id).order_by('-create_time')[:2]
         type_goods_list = GoodsType.objects.all().order_by('id')
         goods_spu = goods_sku.goods
@@ -66,6 +69,10 @@ class GoodsDetailView(View):
             con = get_redis_connection('default')
             cart_key = 'cart_id%s' % request.user.id
             cart_count = con.hlen(cart_key)
+
+            # 添加最近浏览，用sku的id做value
+            con.lrem(request.user.id, 0, goods_id) # 先删除之前列表里面的goods id
+            con.lpush(request.user.id,  goods_id) # 再从左侧添加添加goods id
 
         context.update(cart_count=cart_count)
 
