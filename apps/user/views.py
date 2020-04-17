@@ -159,7 +159,7 @@ class UserInfo(LoginRequiredMixin, View):
         for goods_id in recent_list:
             try:
                 goods_sku = GoodsSKU.objects.get(id=goods_id)
-                goods_recently_list.push(goods_sku)
+                goods_recently_list.append(goods_sku)
             except GoodsSKU.DoesNotExist:
                 print('===>not exist, continue')
                 continue
