@@ -3,7 +3,7 @@ from django.views.generic import View
 # from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 from django.http import HttpResponse
-from .models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
+from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django.core.cache import cache
 from django_redis import get_redis_connection
 
