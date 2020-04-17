@@ -16,7 +16,7 @@
 		<div class="header">
 			<div class="welcome fl">欢迎来到天天生鲜!</div>
 			<div class="fr">
-				{% if user.is_authenticated and not_static_html %}
+				{% if user.is_authenticated and not static_html %}
 				<div class="login_btn fl">
 					欢迎您：<em>{{user.username}}</em>
 					<span>|</span>
