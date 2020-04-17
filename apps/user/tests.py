@@ -83,8 +83,6 @@ dic1 = dict()
 dic1.update(a='2121212')
 print(dic1)
 
-if 1 or False:
-    print(1111)
 
 
 
