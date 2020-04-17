@@ -170,7 +170,7 @@ class IndexView(View):
             cart_key = 'cart_id%s' % request.user.id
             cart_count = con.hlen(cart_key)
 
-        context.update(cart_count=cart_count, not_static_html=True)
+        context.update(cart_count=cart_count)
 
         return render(request, 'user/index.html', context)
 
