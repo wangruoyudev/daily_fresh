@@ -44,8 +44,8 @@
 			</ul>
 			<div class="pagenation">
 				<a href="#"><上一页</a>
-			{% for num in page_count %}
-				<a href="{% url 'goods:list' goods_type.id num %}" {% if cur_page == num %}class="active"{% endif %}>{{num}}</a>
+			{% for page_num in page.paginator.page_range %}
+				<a href="{% url 'goods:list' goods_type.id page_num %}" {% if page_num == page.number %}class="active"{% endif %}>{{page_num}}</a>
 			{% endfor %}
 				<a href="#">下一页></a>
 			</div>
