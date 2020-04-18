@@ -23,7 +23,7 @@
 	<div class="center_con clearfix">
 		<ul class="subnav fl">
 			{% for goods_type in goods_type_list %}
-				<li><a href="{% url 'goods:list' goods_type.id %}" class="{{goods_type.logo}}">{{goods_type.name}}</a></li>
+				<li><a href="{% url 'goods:list' goods_type.id 1 %}" class="{{goods_type.logo}}">{{goods_type.name}}</a></li>
 			{% endfor %}
 		</ul>
 		<div class="slide fl">
