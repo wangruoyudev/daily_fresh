@@ -97,9 +97,15 @@ class GoodsTypeListView(View):
 
         paginator = Paginator(goods_sku_list, 8)
         if page_num.isdigit():
-            page = paginator.page(int(page_num))
+            num = int(page_num)
+            if num > paginator.count:
+                num = paginator.count
+            elif num < 1:
+                num = 1
         else:
             return render(reverse('goods:index'))
+
+        page = paginator.page(num)  # 拿到对应的页对象
 
         context = {'new_goods_list': new_goods_list,
                    'goods_type': goods_type,
