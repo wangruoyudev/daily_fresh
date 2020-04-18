@@ -111,7 +111,9 @@ class GoodsTypeListView(View):
                    'goods_type': goods_type,
                    'goods_sku_list': goods_sku_list,
                    'type_goods_list': type_goods_list,
-                   'page': page, }
+                   'page': page,
+                   'cur_page': num,
+                   'page_count': range(1, paginator.count+1), }
 
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
