@@ -96,24 +96,13 @@ class GoodsTypeListView(View):
         type_goods_list = GoodsType.objects.all().order_by('id')
 
         paginator = Paginator(goods_sku_list, 8)
-        if page_num.isdigit():
-            num = int(page_num)
-            if num > paginator.count:
-                num = paginator.count
-            elif num < 1:
-                num = 1
-        else:
-            return render(reverse('goods:index'))
-
-        page = paginator.page(num)  # 拿到对应的页对象
+        page = paginator.get_page(int(page_num))  # 拿到对应的页对象,这个方法会自动处理超范围的页码
 
         context = {'new_goods_list': new_goods_list,
                    'goods_type': goods_type,
                    'goods_sku_list': goods_sku_list,
                    'type_goods_list': type_goods_list,
-                   'page': page,
-                   'cur_page': num,
-                   'page_count': range(1, paginator.count+1), }
+                   'page': page, }
 
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
