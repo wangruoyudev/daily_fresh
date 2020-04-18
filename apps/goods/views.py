@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import View
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# Create your views here.
 from django.http import HttpResponse
 from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django.core.cache import cache
 from django_redis import get_redis_connection
+from django.core.paginator import Paginator, Page
+# Create your views here.
 
 
 class RedirectIndexView(View):
@@ -83,8 +83,9 @@ class GoodsDetailView(View):
 
 
 class GoodsTypeListView(View):
-    def get(self, request, type_id):
+    def get(self, request, type_id, page_num):
         print('====>type_id:', type_id)
+        print('====>page_num:', page_num, type(page_num))
         new_goods_list = GoodsSKU.objects.all().order_by('-create_time')[:2]
         try:
             goods_type = GoodsType.objects.get(id=type_id)
@@ -92,10 +93,19 @@ class GoodsTypeListView(View):
             return redirect(reverse('goods:index'))
 
         goods_sku_list = GoodsSKU.objects.filter(type=goods_type).order_by('id')
+        type_goods_list = GoodsType.objects.all().order_by('id')
+
+        paginator = Paginator(goods_sku_list, 8)
+        if page_num.isdigit():
+            page = paginator.page(int(page_num))
+        else:
+            return render(reverse('goods:index'))
 
         context = {'new_goods_list': new_goods_list,
                    'goods_type': goods_type,
-                   'goods_sku_list': goods_sku_list, }
+                   'goods_sku_list': goods_sku_list,
+                   'type_goods_list': type_goods_list,
+                   'page': page, }
 
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录

@@ -30,7 +30,7 @@
 			</div>
 
 			<ul class="goods_type_list clearfix">
-			{% for goods_sku in goods_sku_list %}
+			{% for goods_sku in page.object_list %}
 				<li>
 					<a href="{% url 'goods:detail' goods_sku.id %}"><img src="{{goods_sku.image.url}}"></a>
 					<h4><a href="{% url 'goods:detail' goods_sku.id %}">{{goods_sku.name}}</a></h4>
