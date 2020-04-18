@@ -80,3 +80,28 @@ class GoodsDetailView(View):
         context.update(cart_count=cart_count)
 
         return render(request, 'goods/detail.html', context)
+
+
+class GoodsTypeListView(View):
+    def get(self, request, type_id):
+        print('====>type_id:', type_id)
+        new_goods_list = GoodsSKU.objects.all().order_by('-create_time')[:2]
+        try:
+            goods_type = GoodsType.objects.get(id=type_id)
+        except GoodsType.DoesNotExist:
+            return redirect(reverse('goods:index'))
+
+        goods_sku_list = GoodsSKU.objects.filter(type=goods_type).order_by('id')
+
+        context = {'new_goods_list': new_goods_list,
+                   'goods_type': goods_type,
+                   'goods_sku_list': goods_sku_list, }
+
+        cart_count = 0
+        if request.user.is_authenticated:  # 读取缓存中购物车的记录
+            con = get_redis_connection('default')
+            cart_key = 'cart_id%s' % request.user.id
+            cart_count = con.hlen(cart_key)
+        context.update(cart_count=cart_count)
+
+        return render(request, 'goods/list.html', context)
