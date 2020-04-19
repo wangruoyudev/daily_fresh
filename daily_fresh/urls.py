@@ -24,5 +24,5 @@ urlpatterns = [
     path('goods/', include('goods.urls')),
     path('order/', include('order.urls')),
     path('user/', include('user.urls')),
-    re_path(r'^/?$', RedirectIndexView.as_view()),
+    path('/', RedirectIndexView.as_view()),
 ]
