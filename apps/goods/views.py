@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django.core.cache import cache
 from django_redis import get_redis_connection
@@ -112,3 +112,15 @@ class GoodsTypeListView(View):
         context.update(cart_count=cart_count)
 
         return render(request, 'goods/list.html', context)
+
+
+class AddCartView(View):
+    def get(self, request, goods_id):
+        print('===>goods_id:', goods_id)
+        cart_count = 0
+        if request.user.is_authenticated:  # 读取缓存中购物车的记录
+            con = get_redis_connection('default')
+            cart_key = 'cart_id%s' % goods_id
+            cart_count = con.hlen(cart_key)
+        json_data = {'cart_count': cart_count + 1}
+        return JsonResponse(json_data)
