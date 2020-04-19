@@ -125,6 +125,6 @@ class AddCartView(View):
             con = get_redis_connection('default')
             cart_key = 'cart_id%s' % goods_id
             cart_count = con.hlen(cart_key)
-        json_data = {'cart_count': cart_count + 1}
+        json_data = {'goods_count': cart_count + 1}
         return JsonResponse(json_data)
         # return HttpResponse('wangruoyu')
