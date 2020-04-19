@@ -115,8 +115,11 @@ class GoodsTypeListView(View):
 
 
 class AddCartView(View):
-    def get(self, request, goods_id):
+    def get(self, request):
+        goods_id = request.GET.get('goods_id')
         print('===>goods_id:', goods_id)
+        if goods_id is None:
+            return render(reverse('goods:index'))
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
             con = get_redis_connection('default')
