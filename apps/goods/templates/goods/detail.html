@@ -71,7 +71,7 @@
   <div class="add_jump"></div>
 {% endblock bottom %}
 {% block bottomfiles %}
-  <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
 	<script type="text/javascript">
 	$(function ($){
 			var price = $('.show_pirze').children('em').text()
