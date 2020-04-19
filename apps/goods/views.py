@@ -119,12 +119,12 @@ class AddCartView(View):
         goods_id = request.GET.get('goods_id')
         print('===>goods_id:', goods_id)
         if goods_id is None:
-            return render(reverse('goods:index'))
+            return redirect(reverse('goods:index'))
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
             con = get_redis_connection('default')
             cart_key = 'cart_id%s' % goods_id
             cart_count = con.hlen(cart_key)
         json_data = {'cart_count': cart_count + 1}
-        # return JsonResponse(json_data)
-        return HttpResponse('wangruoyu')
+        return JsonResponse(json_data)
+        # return HttpResponse('wangruoyu')
