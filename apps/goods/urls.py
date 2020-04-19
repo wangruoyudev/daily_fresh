@@ -6,5 +6,5 @@ urlpatterns = [
     path('index', IndexView.as_view(), name='index'),
     re_path(r'^detail/(?P<goods_id>\d+)$', GoodsDetailView.as_view(), name='detail'),
     re_path(r'^type_list/(?P<type_id>\d+)/(?P<page_num>\d+)$', GoodsTypeListView.as_view(), name='list'),
-    re_path(r'^add_cart$', AddCartView.as_view(), name='add_cart'),
+    path('add_cart', AddCartView.as_view(), name='add_cart'),
 ]
