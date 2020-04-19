@@ -21,12 +21,12 @@
 			<div class="goods_num clearfix">
 				<div class="num_name fl">数 量：</div>
 				<div class="num_add fl">
-					<input type="text" class="num_show fl" value="1">
+					<input type="number" class="num_show fl" value="1">
 					<a href="javascript:;" class="add fr">+</a>
 					<a href="javascript:;" class="minus fr">-</a>
 				</div>
 			</div>
-			<div class="total">总价：<em>{{goods_sku.price}}</em></div>
+			<div class="total">总价：<em></em></div>
 			<div class="operate_btn">
 				<a href="javascript:;" class="buy_btn">立即购买</a>
 				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
@@ -71,8 +71,47 @@
   <div class="add_jump"></div>
 {% endblock bottom %}
 {% block bottomfiles %}
-  <script type="text/javascript" src="js/jquery-1.12.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript">
+	$(function ($){
+			var price = $('.show_pirze').children('em').text()
+			price = parseFloat(price)
+			var count = $('.num_show').val()
+			count = parseInt(count)
+			console.log('===>price:' + price)
+			console.log('===>count:' + count)
+			var tatol_price = price * count
+			$('.total').children('em').text(tatol_price.toFixed(2))
+
+			$('.add').click(function(){
+				count += 1
+				$('.num_show').val(count)
+				tatol_price = count * price
+				$('.total').children('em').text(tatol_price.toFixed(2))
+			})
+
+			$('.minus').click(function(){
+				count -= 1
+				if (count < 1) {
+					count = 1
+				}
+				$('.num_show').val(count)
+				tatol_price = count * price
+				$('.total').children('em').text(tatol_price.toFixed(2))
+			})
+			$('.num_show').blur(function(){
+				count = $('.num_show').val()
+				count = parseInt(count)
+				if (isNaN(count) || count < 1 || count > 999){
+					count = 1
+				}
+				$('.num_show').val(count)
+				console.log('====>count:'+ count)
+
+				tatol_price = count * price
+				$('.total').children('em').text(tatol_price.toFixed(2))
+			})
+		});
 		var $add_x = $('#add_cart').offset().top;
 		var $add_y = $('#add_cart').offset().left;
 
