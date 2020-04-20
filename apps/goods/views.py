@@ -123,8 +123,17 @@ class AddCartView(View):
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
             con = get_redis_connection('default')
-            cart_key = 'cart_id%s' % goods_id
-            cart_count = con.hlen(cart_key)
-        json_data = {'goods_count': cart_count + 1}
+            cart_key = 'cart_id%s' % request.user.id
+
+            goods_field = con.hget(cart_key, goods_id) # 先读取，加一后再写进去,如果field找不到就直接写1
+            print('====>goods_field:', goods_field)
+            if goods_field:
+                con.hset(cart_key, goods_id, int(goods_field)+1)
+            else:
+                con.hset(cart_key, goods_id, 1)
+
+            cart_count = con.hlen(cart_key)  # 最后再读取一次返回
+
+        json_data = {'goods_count': cart_count}
+
         return JsonResponse(json_data)
-        # return HttpResponse('wangruoyu')
