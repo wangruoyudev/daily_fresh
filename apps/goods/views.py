@@ -117,6 +117,7 @@ class GoodsTypeListView(View):
 class AddCartView(View):
     def get(self, request):
         goods_id = request.GET.get('goods_id')
+        add_count = request.GET.get('add_count', 0)
         print('===>goods_id:', goods_id)
         if goods_id is None:
             return redirect(reverse('goods:index'))
@@ -128,9 +129,9 @@ class AddCartView(View):
             goods_field = con.hget(cart_key, goods_id) # 先读取，加一后再写进去,如果field找不到就直接写1
             print('====>goods_field:', goods_field)
             if goods_field:
-                con.hset(cart_key, goods_id, int(goods_field)+1)
+                con.hset(cart_key, goods_id, int(goods_field) + add_count)
             else:
-                con.hset(cart_key, goods_id, 1)
+                con.hset(cart_key, goods_id, add_count)
 
             cart_count = con.hlen(cart_key)  # 最后再读取一次返回
 

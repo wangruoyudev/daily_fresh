@@ -641,3 +641,7 @@ html,body{height:100%}
 .stress{
 	color:#ff8800;
 }
+
+.for_goods_id{
+    display: none;
+}
