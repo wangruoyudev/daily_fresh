@@ -66,6 +66,7 @@
 
 		</div>
 	</div>
+	<div class="for_goods_id">{{goods_sku.id}}</div>
 {% endblock main_content %}
 
 {% block bottom %}
@@ -121,7 +122,8 @@
 
 		$('#add_cart').click(function(){
 		$.get('/goods/add_cart/', {
-				'goods_id': 3
+				'goods_id': $('.for_goods_id').text(),
+				'add_count': $('.num_show').val()
 			}, function (data) {
 				console.log('====>jsondata:')
 				console.log(data)
