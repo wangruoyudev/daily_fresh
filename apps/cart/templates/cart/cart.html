@@ -82,7 +82,7 @@
 				})
 				$(this).children('.col08').children('a').click(function(){
 					$.get('/cart/cart_del/', {
-						'goods_id': $(this).children('#for_goods_id').text(),
+						'goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
 						}, function (data) {
 							console.log('====>jsondata:')
 							console.log(data)
