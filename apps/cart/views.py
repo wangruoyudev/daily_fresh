@@ -36,12 +36,13 @@ class DelCartView(LoginRequiredMixin, View):
     def get(self, request):
         goods_id = request.GET.get('cart_goods_id', None)
         print('===>goods_id:', goods_id)
-        if goods_id is None:
-            return redirect(reverse('goods:index'))
-        cart_key = 'card_id%s' % request.user.id
-        conn = get_redis_connection('default')
-        conn.hdel(cart_key, goods_id)
         context = {
-            'ret': 'success'
+            'ret': 'failed'
         }
+        if goods_id is not None:
+            cart_key = 'card_id%s' % request.user.id
+            conn = get_redis_connection('default')
+            conn.hdel(cart_key, goods_id)
+            context.update(ret='success')
+
         return JsonResponse(context)

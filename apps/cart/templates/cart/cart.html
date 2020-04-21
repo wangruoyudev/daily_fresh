@@ -86,6 +86,9 @@
 						}, function (data) {
 							console.log('====>jsondata:')
 							console.log(data)
+							if(data['ret'] === 'failed') {
+								location.href = '/goods/index'
+							}
 						}
 					)
 				})
