@@ -29,6 +29,7 @@
 		</li>
 		<li class="col07"><span></span>元</li>
 		<li class="col08"><a href="javascript:;">删除</a></li>
+		<li id="for_goods_id" style="display:none">{{goods_sku.price}}</li>
 	</ul>
 {% endfor %}
 
@@ -78,6 +79,15 @@
 					// a = $(this).prop('checked')
 					// console.log(a)
 					total_price()
+				})
+				$(this).children('.col08').children('a').click(function(){
+					$.get('/cart/cart_del/', {
+						'goods_id': $(this).children('#for_goods_id').text(),
+						}, function (data) {
+							console.log('====>jsondata:')
+							console.log(data)
+						}
+					)
 				})
 			})
 			// 全选
