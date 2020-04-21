@@ -4,7 +4,7 @@
 购物车
 {% endblock page_title %}
 {% block body %}
-<div class="total_count">全部商品<em>x</em>件</div>
+<div class="total_count">全部商品<em>{{total_count}}</em>件</div>
 	<ul class="cart_list_th clearfix">
 		<li class="col01">商品名称</li>
 		<li class="col02">商品单位</li>
@@ -13,12 +13,13 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
+{% for goods_sku in goods_sku_list %}
 	<ul class="cart_list_td clearfix">
 		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02"><img src="images/goods/goods012.jpg"></li>
-		<li class="col03">奇异果<br><em>25.80元/500g</em></li>
-		<li class="col04">500g</li>
-		<li class="col05">25.80元</li>
+		<li class="col02"><img src="{{goods_sku.image.url}}"></li>
+		<li class="col03">{{goods_sku.image.name}}<br><em>{{goods_sku.price}}元/{{goods_sku.unite}}</em></li>
+		<li class="col04">{{goods_sku.unite}}</li>
+		<li class="col05">{{goods_sku.price}}元</li>
 		<li class="col06">
 			<div class="num_add">
 				<a href="javascript:;" class="add fl">+</a>
@@ -33,7 +34,7 @@
 	<ul class="settlements">
 		<li class="col01"><input type="checkbox" name="" checked=""></li>
 		<li class="col02">全选</li>
-		<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>2</b>件商品</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>{{total_count}}</b>件商品</li>
 		<li class="col04"><a href="place_order.html">去结算</a></li>
 	</ul>
 {% endblock body %}
