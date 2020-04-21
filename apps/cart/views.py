@@ -40,7 +40,7 @@ class DelCartView(LoginRequiredMixin, View):
             'ret': 'failed'
         }
         if goods_id is not None:
-            cart_key = 'card_id%s' % request.user.id
+            cart_key = 'cart_id%s' % request.user.id
             conn = get_redis_connection('default')
             conn.hdel(cart_key, goods_id)
             context.update(ret='success')
