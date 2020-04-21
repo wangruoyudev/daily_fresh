@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, reverse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_redis import get_redis_connection
@@ -30,3 +30,18 @@ class CartInfoView(LoginRequiredMixin, View):
             'total_count': total_count,
         }
         return render(request, 'cart/cart.html', context)
+
+
+class DelCartView(LoginRequiredMixin, View):
+    def get(self, request):
+        goods_id = request.GET.get('cart_goods_id', None)
+        print('===>goods_id:', goods_id)
+        if goods_id is None:
+            return redirect(reverse('goods:index'))
+        cart_key = 'card_id%s' % request.user.id
+        conn = get_redis_connection('default')
+        conn.hdel(cart_key, goods_id)
+        context = {
+            'ret': 'success'
+        }
+        return JsonResponse(context)
