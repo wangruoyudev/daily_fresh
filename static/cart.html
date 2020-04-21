@@ -105,12 +105,13 @@
 		<p>电话：010-****888    京ICP备*******8号</p>
 	</div>
 	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-		<script type="text/javascript">
+	<script type="text/javascript">
 		$(function ($){
 			var list1 = $('.cart_list_td')
 			$.each($('.cart_list_td'), function (index, value) {
 				// console.log(index, value)
-				
+				var a = $(this).children('.col05').text()
+				console.log($('.cart_list_td').eq(index).children('.col05').text())
 				var price = $(this).children('.col05').text()
 				price = parseFloat(price)
 				var count = $(this).children('.col06').find("input[type='number']").val()
