@@ -53,8 +53,6 @@ class IndexView(View):
 class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
-        print('====>CSRF_USE_SESSIONS', settings.CSRF_USE_SESSIONS)
-        print('====>CSRF_COOKIE_HTTPONLY', settings.CSRF_COOKIE_HTTPONLY)
         try:
             goods_sku = GoodsSKU.objects.get(id=goods_id)
         except GoodsSKU.DoseNotExist:
