@@ -120,12 +120,22 @@
 
 		var $to_x = $('#show_count').offset().top;
 		var $to_y = $('#show_count').offset().left;
-
+		function csrfSafeMethod(method) {
+			// these HTTP methods do not require CSRF protection
+			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
 		$('#add_cart').click(function(){
+		var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+		$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+						if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+								xhr.setRequestHeader("X-CSRFToken", csrftoken);
+						}
+				}
+		});
 		$.post('/goods/add_cart/', {
 				'goods_id': $('.for_goods_id').text(),
-				'add_count': $('.num_show').val(),
-				'csrftoken': $("[name='csrfmiddlewaretoken']").val()
+				'add_count': $('.num_show').val()
 			}, function (data) {
 				console.log('====>jsondata:')
 				console.log(data)
