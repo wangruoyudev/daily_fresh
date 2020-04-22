@@ -5,6 +5,7 @@ from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoods
 from django.core.cache import cache
 from django_redis import get_redis_connection
 from django.core.paginator import Paginator, Page
+from django.conf import settings
 # Create your views here.
 
 
@@ -52,6 +53,8 @@ class IndexView(View):
 class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
+        print('====>CSRF_USE_SESSIONS', settings.CSRF_USE_SESSIONS)
+        print('====>CSRF_COOKIE_HTTPONLY', settings.CSRF_COOKIE_HTTPONLY)
         try:
             goods_sku = GoodsSKU.objects.get(id=goods_id)
         except GoodsSKU.DoseNotExist:
