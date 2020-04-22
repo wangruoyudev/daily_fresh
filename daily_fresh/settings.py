@@ -185,3 +185,5 @@ CUSTOM_STORAGE_OPTIONS = {
     'client_config': os.path.join(BASE_DIR, 'daily_fresh/client.conf'),
     'nginx_domain': 'http://test.quickfs.cn/',
 }
+
+CSRF_USE_SESSIONS = True
