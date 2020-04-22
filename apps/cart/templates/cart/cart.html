@@ -81,6 +81,10 @@
 					// console.log(a)
 					total_price()
 				})
+				function csrfSafeMethod(method) {
+					// these HTTP methods do not require CSRF protection
+					return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+				}
 				$(this).children('.col08').children('a').click(function(){
 					var csrftoken = $("[name='csrfmiddlewaretoken']").val()
 					$.ajaxSetup({
