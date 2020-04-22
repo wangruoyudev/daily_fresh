@@ -162,15 +162,22 @@
 		});		
 		function total_price(){
 			var total_price = 0
+			var total_count = 0
 			$.each($('.cart_list_td'), function (index, value) {
 				if ($(this).children('.col01').children("input[type='checkbox']").prop('checked')){
 					var price = $(this).children('.col07').children('span').text()
 					price = parseFloat(price)
 					total_price += price
+					var count = $(this).children('.col06').find("input[type='number']").val()
+					count = parseInt(count)
+					total_count += count
 				}
 			})
 			$('.settlements').children('li.col03').children('em').text(total_price.toFixed(2))
+			$('.settlements').children('li.col03').children('b').text(total_count)
+			$('.total_count').children('em').text(total_count)
 		}
+		
 	</script>
 </body>
 </html>
