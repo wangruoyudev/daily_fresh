@@ -5,6 +5,7 @@ from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoods
 from django.core.cache import cache
 from django_redis import get_redis_connection
 from django.core.paginator import Paginator, Page
+from django.contrib.sessions.backends.base import SessionBase
 from django.conf import settings
 # Create your views here.
 
@@ -53,6 +54,8 @@ class IndexView(View):
 class GoodsDetailView(View):
     def get(self, request, goods_id):
         print('===>goods_id:', goods_id)
+        a = SessionBase().decode("\x80\x04\x95\xe8\x00\x00\x00\x00\x00\x00\x00}\x94(\x8c\r_auth_user_id\x94\x8c\x0230\x94\x8c\x12_auth_user_backend\x94\x8c)django.contrib.auth.backends.ModelBackend\x94\x8c\x0f_auth_user_hash\x94\x8c(383d910ee99565076c6a6e61be6e194ca1039277\x94\x8c\n_csrftoken\x94\x8c@7ghTg61dIB1SeVWFQ3ckSJysftq9pz8iH090zOJg5Aq5pjsjlA9jSsYa4FPLSHaq\x94u.")
+        print(a)
         try:
             goods_sku = GoodsSKU.objects.get(id=goods_id)
         except GoodsSKU.DoseNotExist:
