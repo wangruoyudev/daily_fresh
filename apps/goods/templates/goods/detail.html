@@ -125,7 +125,7 @@
 		$.post('/goods/add_cart/', {
 				'goods_id': $('.for_goods_id').text(),
 				'add_count': $('.num_show').val(),
-				'csrf': $("[name='csrfmiddlewaretoken']").val()
+				'csrftoken': $("[name='csrfmiddlewaretoken']").val()
 			}, function (data) {
 				console.log('====>jsondata:')
 				console.log(data)
