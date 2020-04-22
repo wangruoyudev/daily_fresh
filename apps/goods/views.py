@@ -115,6 +115,7 @@ class GoodsTypeListView(View):
 
 
 class AddCartView(View):
+    '''没比较存库量，后续要处理一下，还有订单并发'''
     def post(self, request):
         goods_id = request.POST.get('goods_id')
         add_count = request.POST.get('add_count', 0)

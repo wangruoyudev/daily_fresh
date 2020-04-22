@@ -124,7 +124,8 @@
 		$('#add_cart').click(function(){
 		$.post('/goods/add_cart/', {
 				'goods_id': $('.for_goods_id').text(),
-				'add_count': $('.num_show').val()
+				'add_count': $('.num_show').val(),
+				'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
 			}, function (data) {
 				console.log('====>jsondata:')
 				console.log(data)
