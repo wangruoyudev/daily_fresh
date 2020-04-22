@@ -74,6 +74,7 @@
 {% endblock bottom %}
 {% block bottomfiles %}
   <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+{% csrf_token %}
 	<script type="text/javascript">
 	$(function ($){
 			var price = $('.show_pirze').children('em').text()
@@ -121,7 +122,6 @@
 		var $to_y = $('#show_count').offset().left;
 
 		$('#add_cart').click(function(){
-		{%  csrf_token %}
 		$.post('/goods/add_cart/', {
 				'goods_id': $('.for_goods_id').text(),
 				'add_count': $('.num_show').val()
