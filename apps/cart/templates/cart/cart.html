@@ -42,6 +42,7 @@
 {% endblock body %}
 {% block bottomfiles %}
   <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+{% csrf_token %}
 	<script type="text/javascript">
 		$(function ($){
 			var list1 = $('.cart_list_td')
@@ -81,7 +82,15 @@
 					total_price()
 				})
 				$(this).children('.col08').children('a').click(function(){
-					$.get('/cart/cart_del/', {
+					var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+					$.ajaxSetup({
+							beforeSend: function(xhr, settings) {
+									if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+											xhr.setRequestHeader("X-CSRFToken", csrftoken);
+									}
+							}
+					});
+					$.post('/cart/cart_del/', {
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
 						}, function (data) {
 							console.log('====>jsondata:')
@@ -112,6 +121,7 @@
 		});
 		function total_price(){
 			var total_price = 0
+			var total_count = 0
 			$.each($('.cart_list_td'), function (index, value) {
 				if ($(this).children('.col01').children("input[type='checkbox']").prop('checked')){
 					var price = $(this).children('.col07').children('span').text()
