@@ -124,6 +124,10 @@
 			// these HTTP methods do not require CSRF protection
 			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 		}
+		function csrfSafeMethod(method) {
+			// these HTTP methods do not require CSRF protection
+			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
 		$('#add_cart').click(function(){
 		var csrftoken = $("[name='csrfmiddlewaretoken']").val()
 		$.ajaxSetup({
