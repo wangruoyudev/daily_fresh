@@ -117,9 +117,14 @@
 					var price = $(this).children('.col07').children('span').text()
 					price = parseFloat(price)
 					total_price += price
+					var count = $(this).children('.col06').find("input[type='number']").val()
+					count = parseInt(count)
+					total_count += count
 				}
 			})
 			$('.settlements').children('li.col03').children('em').text(total_price.toFixed(2))
+			$('.settlements').children('li.col03').children('b').text(total_count)
+			$('.total_count').children('em').text(total_count)
 		}
 	</script>
 {% endblock bottomfiles %}
