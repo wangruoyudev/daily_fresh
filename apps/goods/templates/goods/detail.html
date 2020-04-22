@@ -121,7 +121,7 @@
 		var $to_y = $('#show_count').offset().left;
 
 		$('#add_cart').click(function(){
-		$.get('/goods/add_cart/', {
+		$.post('/goods/add_cart/', {
 				'goods_id': $('.for_goods_id').text(),
 				'add_count': $('.num_show').val()
 			}, function (data) {

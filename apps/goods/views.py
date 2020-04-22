@@ -115,9 +115,9 @@ class GoodsTypeListView(View):
 
 
 class AddCartView(View):
-    def get(self, request):
-        goods_id = request.GET.get('goods_id')
-        add_count = request.GET.get('add_count', 0)
+    def post(self, request):
+        goods_id = request.POST.get('goods_id')
+        add_count = request.POST.get('add_count', 0)
         print('===>goods_id:', goods_id)
         print('===>add_count:', add_count)
         if goods_id is None:
