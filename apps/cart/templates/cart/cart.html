@@ -97,6 +97,7 @@
 					});
 					$.post('/cart/cart_del/', {
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
+						'test1': {'a': '123', 'b': '456', 'c': '789'}
 						}, function (data) {
 							console.log('====>jsondata:')
 							console.log(data)
