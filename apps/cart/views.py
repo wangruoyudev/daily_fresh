@@ -37,6 +37,7 @@ class DelCartView(View):
         if request.user.is_authenticated:
             goods_id = request.POST.get('cart_goods_id', None)
             print('===>goods_id:', goods_id)
+            print('==>DelCartView-post:', request.POST)
             context = {
                 'ret': 'failed'
             }
