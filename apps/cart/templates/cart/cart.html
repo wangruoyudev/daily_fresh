@@ -13,8 +13,9 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-	{% csrf_token %}
+
 	<form action="{% url 'order:create_order' %}" method="post">
+	{% csrf_token %}
 	{% for goods_sku in goods_sku_list %}
 		<ul class="cart_list_td clearfix">
 			<li class="col01"><input type="checkbox" name="sku_id" value="{{goods_sku.id}}" checked></li>
