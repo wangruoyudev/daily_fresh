@@ -71,7 +71,7 @@ class LogoutView(View):
         return redirect(reverse('goods:index'))
 
 
-class RegisterView(LoginRequiredMixin, View):
+class RegisterView(View):
     def get(self, request):
         # print(request.scheme)
         # print('request.META-HTTP_HOST------->')
