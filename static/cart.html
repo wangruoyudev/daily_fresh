@@ -144,6 +144,9 @@
 					// console.log(a)
 					total_price()
 				})
+				$(this).children('.col08').children('a').click(function(){
+					$(this).parent().parent().remove()
+				})
 			})
 			// 全选
 			$('.settlements').children('li.col01').children("input[type='checkbox']").change(function(){

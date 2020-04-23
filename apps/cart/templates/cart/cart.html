@@ -86,6 +86,7 @@
 					return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 				}
 				$(this).children('.col08').children('a').click(function(){
+					var self = $(this)
 					var csrftoken = $("[name='csrfmiddlewaretoken']").val()
 					$.ajaxSetup({
 							beforeSend: function(xhr, settings) {
@@ -102,7 +103,8 @@
 							if(data['ret'] === 'failed') {
 								location.href = '/goods/index'
 							}else if (data['ret'] === 'success'){
-								location.href = '/cart/info'
+								//location.href = '/cart/info'
+								self.parent().parent().remove()
 							}
 						}
 					)
