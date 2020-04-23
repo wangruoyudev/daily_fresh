@@ -5,7 +5,8 @@ from django.views.generic import View
 
 
 class CreateOrderView(LoginRequiredMixin, View):
-    def get(self, request):
+    def post(self, request):
+        print('====>CreateOrderView-post:', request.POST)
         context = {}
         return render(request, 'order/place_order.html', context)
 

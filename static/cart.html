@@ -49,47 +49,50 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-	<ul class="cart_list_td clearfix">
-		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02"><img src="images/goods/goods012.jpg"></li>
-		<li class="col03">奇异果<br><em>25.80元/500g</em></li>
-		<li class="col04">500g</li>
-		<li class="col05">25.80元</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl">+</a>
-				<input type="number" class="num_show fl" value="10">	
-				<a href="javascript:;" class="minus fl">-</a>	
-			</div>
-		</li>
-		<li class="col07"><span></span>元</li>
-		<li class="col08"><a href="javascript:;">删除</a></li>
-	</ul>
+	<form action="/create_order" method="get">
+		<ul class="cart_list_td clearfix">
+			<li class="col01"><input type="checkbox"  name="sku_id" value="1" checked></li>
+			<li class="col02"><img src="images/goods/goods012.jpg"></li>
+			<li class="col03">奇异果<br><em>25.80元/500g</em></li>
+			<li class="col04">500g</li>
+			<li class="col05">25.80元</li>
+			<li class="col06">
+				<div class="num_add">
+					<a href="javascript:;" class="add fl">+</a>
+					<input type="number" class="num_show fl" value="10">	
+					<a href="javascript:;" class="minus fl">-</a>	
+				</div>
+			</li>
+			<li class="col07"><span></span>元</li>
+			<li class="col08"><a href="javascript:;">删除</a></li>
+		</ul>
 
-	<ul class="cart_list_td clearfix">
-		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02"><img src="images/goods/goods003.jpg"></li>
-		<li class="col03">大兴大棚草莓<br><em>16.80元/500g</em></li>
-		<li class="col04">500g</li>
-		<li class="col05">16.80元</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl">+</a>
-				<input type="number" class="num_show fl" value="10">	
-				<a href="javascript:;" class="minus fl">-</a>	
-			</div>
-		</li>
-		<li class="col07"><span></span>元</li>
-		<li class="col08"><a href="javascript:;">删除</a></li>
-	</ul>
-	
+		<ul class="cart_list_td clearfix">
+			<li class="col01"><input type="checkbox" name="sku_id" value="2" checked></li>
+			<li class="col02"><img src="images/goods/goods003.jpg"></li>
+			<li class="col03">大兴大棚草莓<br><em>16.80元/500g</em></li>
+			<li class="col04">500g</li>
+			<li class="col05">16.80元</li>
+			<li class="col06">
+				<div class="num_add">
+					<a href="javascript:;" class="add fl" disabled>+</a>
+					<input type="number" class="num_show fl" value="10">	
+					<a href="javascript:;" class="minus fl">-</a>	
+				</div>
+			</li>
+			<li class="col07"><span></span>元</li>
+			<li class="col08"><a href="javascript:;">删除</a></li>
+		</ul>
+		
 
-	<ul class="settlements">
-		<li class="col01"><input type="checkbox" name="" checked></li>
-		<li class="col02">全选</li>
-		<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>2</b>件商品</li>
-		<li class="col04"><a href="place_order.html">去结算</a></li>
-	</ul>
+		<ul class="settlements">
+			<li class="col01"><input type="checkbox" name="" checked></li>
+			<li class="col02">全选</li>
+			<li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>2</b>件商品</li>
+			<li class="col04"><a href="javascript:traggerSubmit();">去结算</a></li>
+		</ul>
+		<input type="submit" value="提交">
+	</form>
 
 	<div class="footer">
 		<div class="foot_link">
@@ -122,13 +125,19 @@
 				// add = $(this).children('.col06').find('.add').text()
 				// console.log(add)
 
-				$(this).children('.col06').find('.add').click(function(){
-					console.log('====>count:', typeof(count))
+				$(this).children('.col06').find('.add').on('click', function aa(){
+					// $(this).attr("disabled",true).css("pointer-events","none"); 
+					// $(this).off('click', aa)
+					// console.log('000')
+					// console.log('====>count:', typeof(count))
 					count += 1
 					$(this).next("input[type='number']").val(count)
 					tatol_price = count * price
 					tmp = $(this).parent('.num_add').parent('.col06').next('.col07').children('span').text(tatol_price.toFixed(2))
 					total_price()
+					// sleep(3000)
+					// console.log('1111')
+					// $(this).one('click', aa)
 				})
 				$(this).children('.col06').find('.minus').click(function(){
 					count -= 1
@@ -205,7 +214,16 @@
 			$('.settlements').children('li.col03').children('b').text(total_count)
 			$('.total_count').children('em').text(total_count)
 		}
-		
+		function sleep(delay) {
+			var start = (new Date()).getTime();
+			while((new Date()).getTime() - start < delay) {
+					continue;
+			}
+		}
+		function traggerSubmit(){
+			console.log('aaaaa')
+			$('form').submit()
+		}
 	</script>
 </body>
 </html>

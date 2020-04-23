@@ -202,7 +202,7 @@
 
 		$('#add_cart').click(function(){
 			$.get('/goods/add_cart/', {
-				goods_id: goods_sku.id
+				'goods_id': goods_sku.id
 			}, function (data) {
 				console.log('====>jsondata:')
 				console.log(data)
