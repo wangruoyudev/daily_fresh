@@ -65,10 +65,19 @@
 
 				$(this).children('.col06').find('.add').click(function(){
 					count += 1
-					$(this).next("input[type='number']").val(count)
-					tatol_price = count * price
-					tmp = $(this).parent('.num_add').parent('.col06').next('.col07').children('span').text(tatol_price.toFixed(2))
-					total_price()
+					var self = $(this)
+					var param = {
+						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
+						'cart_goods_count': count
+					}
+					ajaxPost('/cart/update/', param, function(){
+						self.next("input[type='number']").val(count)
+						tatol_price = count * price
+						tmp = $(this).parent('.num_add').parent('.col06').next('.col07').children('span').text(tatol_price.toFixed(2))
+						total_price()
+					}, function(){
+						location.href = '/goods/index'
+					})
 				})
 				$(this).children('.col06').find('.minus').click(function(){
 					count -= 1
@@ -99,37 +108,42 @@
 					// console.log(a)
 					total_price()
 				})
-				function csrfSafeMethod(method) {
-					// these HTTP methods do not require CSRF protection
-					return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-				}
 				$(this).children('.col08').children('a').click(function(){
 					var self = $(this)
-					var csrftoken = $("[name='csrfmiddlewaretoken']").val()
-					$.ajaxSetup({
-							beforeSend: function(xhr, settings) {
-									if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-											xhr.setRequestHeader("X-CSRFToken", csrftoken);
-									}
-							}
-					});
-					$.post('/cart/cart_del/', {
-						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
-						'test1': {'a': '123', 'b': '456', 'c': '789'}
-						}, function (data) {
-							console.log('====>jsondata:')
-							console.log(data)
-							if(data['ret'] === 'failed') {
-								location.href = '/goods/index'
-							}else if (data['ret'] === 'success'){
-								//location.href = '/cart/info'
-								self.parents('ul').remove()
-								total_price()
-							}
-						}
-					)
+					var param = {
+						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text()
+					}
+					ajaxPost('/cart/cart_del/', param, function(){
+						self.parents('ul').remove()
+						total_price()
+					}, function(){
+						location.href = '/goods/index'
+					})
 				})
 			})
+			function csrfSafeMethod(method) {
+				// these HTTP methods do not require CSRF protection
+				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			function ajaxPost(url, param, successFun, failFun) {
+				var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+				$.ajaxSetup({
+					beforeSend: function(xhr, settings) {
+						if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+								xhr.setRequestHeader("X-CSRFToken", csrftoken);
+						}
+					}
+				});
+				$.post(url, param, function (data) {
+					console.log('====>jsondata:')
+					console.log(data)
+					if(data['ret'] === 'failed') {
+						failFun()
+					}else if (data['ret'] === 'success'){
+						successFun()
+					}
+				})
+			}
 			// 全选
 			$('.settlements').find(':checkbox').change(function(){
 				var is_checked = $(this).prop('checked')

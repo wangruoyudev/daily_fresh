@@ -9,3 +9,5 @@ print(type(dic1.items()))
 for key, value in dic1.items():
     # print('key: ', key.decode(), '   -value: ', dic1[key].decode())
     print('key: ', key.decode(), '   -value: ', value)
+
+    print(int('11a'))
