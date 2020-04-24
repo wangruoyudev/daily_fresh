@@ -39,9 +39,9 @@
 			<li class="col04">数量</li>
 			<li class="col05">小计</li>
 		</ul>
-		{% for goods_sku in goods_sku_list %}
+		{% for index, goods_sku in goods_sku_list %}
 		<ul class="goods_list_td clearfix">
-			<li class="col01">1</li>
+			<li class="col01">{{index}}</li>
 			<li class="col02"><img src="{{goods_sku.image.url}}"></li>
 			<li class="col03">{{goods_sku.name}}</li>
 			<li class="col04">{{goods_sku.unite}}</li>
@@ -57,7 +57,7 @@
 	<div class="common_list_con clearfix">
 		<div class="settle_con">
 			<div class="total_goods_count">共<em>2</em>件商品，总金额<b>42.60元</b></div>
-			<div class="transit">运费：<b>10元</b></div>
+<!--			<div class="transit">运费：<b>10元</b></div>-->
 			<div class="total_pay">实付款：<b>52.60元</b></div>
 		</div>
 	</div>
@@ -89,5 +89,22 @@
 
 			});
 		});
+		$(function(){
+			var total_count = 0
+			var total_price = 0.00
+			$('.goods_list_td').each(function(index, elem){
+				var price = $(this).children('.col05').text()
+				price = parseFloat(price)
+				var count = $(this).children('.col06').text()
+				count = parseInt(count)
+				var per_total_price = price * count
+				$(this).children('.col05').text(per_total_price.toFixed(2) + '元')
+				total_count += count
+				total_price += per_total_price
+			})
+			$('.total_goods_count').children('em').text(total_count)
+			$('.total_goods_count').children('b').text(total_price.toFixed(2) + '元')
+			$('.total_pay').children('b').text(total_price.toFixed(2) + '元')
+		})
 	</script>
 {% endblock bottomfiles %}

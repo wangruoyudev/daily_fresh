@@ -20,11 +20,11 @@ class CreateOrderView(LoginRequiredMixin, View):
                 try:
                     goods_sku = GoodsSKU.objects.get(id=goods_id)
                     goods_count = conn.hget(cart_key, goods_id)
-                    goods_sku.cart_goods_count = goods_count
+                    goods_sku.cart_goods_count = goods_count.decode()
                     goods_sku_list.append(goods_sku)
                 except GoodsSKU.DoesNotExist:
                     continue
         print('====>goods_sku_list:', goods_sku_list)
-        context = {'goods_sku_list': goods_sku_list}
+        context = {'goods_sku_list': enumerate(goods_sku_list)}
         return render(request, 'order/place_order.html', context)
 
