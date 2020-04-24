@@ -10,6 +10,7 @@ class CreateOrderView(LoginRequiredMixin, View):
     def post(self, request):
         print('====>CreateOrderView-post:', request.POST)
         goods_id_list = request.POST.get('sku_id', None)
+        print('===>goods_id_list:', goods_id_list)
         if goods_id_list is not None:
             conn = get_redis_connection('default')
             cart_key = 'cart_id%s' % request.user.id
@@ -22,6 +23,7 @@ class CreateOrderView(LoginRequiredMixin, View):
                     goods_sku_list.append(goods_sku)
                 except GoodsSKU.DoesNotExist:
                     continue
+        print('====>goods_sku_list:', goods_sku_list)
         context = {'goods_sku_list': goods_sku_list}
         return render(request, 'order/place_order.html', context)
 
