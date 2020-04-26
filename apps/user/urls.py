@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from .views import LoginView, RegisterView, ActiveAccount, \
-    TestView,UserInfo, UserOrder, UserAddress, userinfo, LogoutView
+    TestView,UserInfo, UserOrder, UserAddress, userinfo, LogoutView, SetDefaultAddress
 
 app_name = 'user'
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     # path('', userinfo, name='info'),
     path('order/', UserOrder.as_view(), name='order'),
     path('address/', UserAddress.as_view(), name='address'),
+    path('address/set_default/', SetDefaultAddress.as_view(), name='set_default'),
     path('test/', TestView.as_view(), name='test'),
 
 ]

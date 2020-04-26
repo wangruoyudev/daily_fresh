@@ -58,6 +58,14 @@
 				var ckeck_input = $('.address_other').find("input:checked")
 				if (ckeck_input.length > 0){
 					console.log(ckeck_input.val())
+					var param = {
+						'address_id': ckeck_input.val()
+					}
+					ajaxPost('/user/address/set_default/', param, function(){
+						location.href = '/user/address'
+					}, function(){
+						alert('操作失败了')
+					})
 					$('.address_default').find('dd').text(ckeck_input.next().text())
 				}
 			})
@@ -70,7 +78,9 @@
 					'phone_num': $("input[name='phone_num']").val()
 				}
 				ajaxPost('', param, function(){
+					location.href = '/user/address'
 				}, function(){
+					alert('操作失败了')
 				})
 			})
 			function csrfSafeMethod(method) {

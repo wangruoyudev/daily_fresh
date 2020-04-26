@@ -216,6 +216,34 @@ class UserAddress(LoginRequiredMixin, View):
         return JsonResponse(context)
 
 
+class SetDefaultAddress(View):
+    def post(self, request):
+        context = {'ret': 'failed'}
+        if not request.user.is_authenticated:
+            return JsonResponse(context)
+
+        address_id = request.POST.get('address_id', None)
+        if address_id:
+            try:
+                last_default_address = Address.objects.get(is_default=True)
+            except Address.DoesNotExist:
+                last_default_address = None
+
+            if last_default_address is not None:
+                last_default_address.is_default = False
+                last_default_address.save()
+
+            try:
+                default_address = Address.objects.get(id=address_id)
+            except Address.DoesNotExist:
+                return JsonResponse(context)
+            default_address.is_default = True
+            default_address.save()
+            context = {'ret': 'success'}
+
+        return JsonResponse(context)
+
+
 class TestView(View):
     def get(self, request):
         pic = GoodsType.objects.get(name='云图片测试')
