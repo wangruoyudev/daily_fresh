@@ -186,7 +186,7 @@ class UserAddress(LoginRequiredMixin, View):
             default_address = None
         return render(request,
                       'user/user_center_site.html',
-                      {'address_list': 'address_list',
+                      {'address_list': address_list,
                        'default_address': default_address})
 
     def post(self, request):
