@@ -40,5 +40,9 @@ class SubmitOrderView(View):
     def post(self, request):
         print('====>SubmitOrderView-post: ', request.POST)
         context = {'ret': 'failed'}
+        address_id = request.POST.get('address_id', None)
+        pay_style = request.POST.get('pay_style', None)
+        goods_list = request.POST.getlist('goods_list', [])
+        print(address_id, pay_style, goods_list)
         return JsonResponse(context)
 
