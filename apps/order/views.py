@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from apps.goods.models import GoodsSKU
+from apps.user.models import Address
 from django_redis import get_redis_connection
 # Create your views here.
 
@@ -25,6 +26,11 @@ class CreateOrderView(LoginRequiredMixin, View):
                 except GoodsSKU.DoesNotExist:
                     continue
         print('====>goods_sku_list:', goods_sku_list)
-        context = {'goods_sku_list': enumerate(goods_sku_list, start=1)}
+        try:
+            address = Address.objects.get(is_default=True)
+        except Address.DoesNotExist:
+            address = None
+        context = {'goods_sku_list': enumerate(goods_sku_list, start=1),
+                   'address': address}
         return render(request, 'order/place_order.html', context)
 
