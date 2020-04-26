@@ -25,6 +25,6 @@ class CreateOrderView(LoginRequiredMixin, View):
                 except GoodsSKU.DoesNotExist:
                     continue
         print('====>goods_sku_list:', goods_sku_list)
-        context = {'goods_sku_list': enumerate(goods_sku_list)}
+        context = {'goods_sku_list': enumerate(goods_sku_list, start=1)}
         return render(request, 'order/place_order.html', context)
 

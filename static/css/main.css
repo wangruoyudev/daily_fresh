@@ -637,6 +637,17 @@ html,body{height:100%}
 	cursor:pointer;
 	font-family:'Microsoft Yahei'
 }
+.btn_submit{
+	/* width:80px; */
+	/* height:30px; */
+	background-color:#37ab40;
+	border:0px;
+	color:#fff;
+	margin:10px 0 10px 10px;
+	cursor:pointer;
+	font-family:'Microsoft Yahei';
+	padding: 10px;
+}
 
 .stress{
 	color:#ff8800;

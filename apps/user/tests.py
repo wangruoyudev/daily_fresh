@@ -72,17 +72,20 @@ TestObject.as_view()
 print(TestObject.__mro__)
 
 
-str1 = 'fsdfds1.sfs.fsd'
-ls = str.split(str1, '.')
-if len(ls) > 1:
-    print(ls[-1])
-else:
-    print('null')
+# str1 = 'fsdfds1.sfs.fsd'
+# ls = str.split(str1, '.')
+# if len(ls) > 1:
+#     print(ls[-1])
+# else:
+#     print('null')
+#
+# dic1 = dict()
+# dic1.update(a='2121212')
+# print(dic1)
 
-dic1 = dict()
-dic1.update(a='2121212')
-print(dic1)
 
+if all([1, '']):
+    print('ww')
 
 
 

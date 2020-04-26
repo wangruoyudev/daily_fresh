@@ -2,16 +2,18 @@ from django.shortcuts import render, reverse, redirect
 from django.views.generic import View
 from apps.user.models import User
 from apps.goods.models import GoodsType, GoodsSKU
+from apps.user.models import Address
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from apps.user.tasks import send_register_active_mail
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_redis import get_redis_connection
+
 
 class LoginView(View):
 
@@ -46,7 +48,7 @@ class LoginView(View):
         print('----->', user)
         if user is not None:
             login(request, user)
-            print('get:',request.GET)
+            print('get:', request.GET)
 
             redirect_url = request.GET.get('next', reverse('goods:index'))
             response = redirect(redirect_url)
@@ -139,10 +141,10 @@ class ActiveAccount(LoginRequiredMixin, View):
             return HttpResponse('<h1>激活链接已过期</h1>')
 
 
-
 @login_required(login_url='/user/register')
 def userinfo(request):
-    print('====>session time:', cache.ttl('django.contrib.sessions.cachequmpbccpxasfweqeh6zb6c8q7nejbtfh'))
+    print('====>session time:', cache.ttl(
+        'django.contrib.sessions.cachequmpbccpxasfweqeh6zb6c8q7nejbtfh'))
     return render(request, 'user/user_center_info.html', {'page': 'info'})
 
 
@@ -164,27 +166,60 @@ class UserInfo(LoginRequiredMixin, View):
                 print('===>not exist, continue')
                 continue
 
-        return render(request, 'user/user_center_info.html', {'page': 'info',
-                                                              'goods_recently_list': goods_recently_list})
+        return render(request, 'user/user_center_info.html',
+                      {'page': 'info', 'goods_recently_list': goods_recently_list})
 
 
 class UserOrder(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'user/user_center_order.html', {'page': 'order'})
+        return render(request,
+                      'user/user_center_order.html',
+                      {'page': 'order'})
 
 
 class UserAddress(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'user/user_center_site.html', {'page': 'address'})
+        address_list = Address.objects.all()
+        try:
+            default_address = Address.objects.get(is_default=True)
+        except Address.DoesNotExist:
+            default_address = None
+        return render(request,
+                      'user/user_center_site.html',
+                      {'address_list': 'address_list',
+                       'default_address': default_address})
+
+    def post(self, request):
+        receiver = request.POST.get('receiver', None)
+        detail_address = request.POST.get('detail_address', None)
+        zip_post = request.POST.get('zip_post', None)
+        phone_num = request.POST.get('phone_num', None)
+
+        context = {'ret': 'failed'}
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return JsonResponse(context)
+
+        if all([receiver, detail_address, phone_num]):
+            new_address = Address.objects.create(
+                user=user,
+                receiver=receiver,
+                addr=detail_address,
+                zip_code=zip_post,
+                phone=phone_num,
+                is_default=False)
+
+            new_address.save()
+            context = {'ret': 'success'}
+
+        return JsonResponse(context)
 
 
 class TestView(View):
     def get(self, request):
         pic = GoodsType.objects.get(name='云图片测试')
         print('===>pic-type:', type(pic))
-        print('===>pic:', pic) # 返回的是__str__
+        print('===>pic:', pic)  # 返回的是__str__
         print('===>pic-image-type:', type(pic.image))
         return render(request, 'user/test.html', {'pic': pic})
-
-
-

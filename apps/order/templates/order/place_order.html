@@ -47,7 +47,7 @@
 			<li class="col04">{{goods_sku.unite}}</li>
 			<li class="col05">{{goods_sku.price}}元</li>
 			<li class="col06">{{goods_sku.cart_goods_count}}</li>
-			<li class="col07"><span></span>元</li>
+			<li class="col07">元</li>
 		</ul>
 		{% endfor %}
 	</div>
@@ -98,7 +98,7 @@
 				var count = $(this).children('.col06').text()
 				count = parseInt(count)
 				var per_total_price = price * count
-				$(this).children('.col05').text(per_total_price.toFixed(2) + '元')
+				$(this).children('.col07').text(per_total_price.toFixed(2) + '元')
 				total_count += count
 				total_price += per_total_price
 			})
