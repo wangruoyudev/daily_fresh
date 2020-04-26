@@ -45,7 +45,7 @@
 	<div class="common_list_con clearfix">
 		<dl>
 			<dt>寄送到：</dt>
-			<dd><input type="radio" name="" checked="">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
+			<dd><input type="radio" name="address_id" value='1' checked="">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
 		</dl>
 		<a href="user_center_site.html" class="edit_site">编辑收货地址</a>
 
@@ -54,13 +54,13 @@
 	<h3 class="common_title">支付方式</h3>	
 	<div class="common_list_con clearfix">
 		<div class="pay_style_con clearfix">
-			<input type="radio" name="pay_style" checked>
+			<input type="radio" name="pay_style" checked value="1">
 			<label class="cash">货到付款</label>
-			<input type="radio" name="pay_style">
+			<input type="radio" name="pay_style" value="2">
 			<label class="weixin">微信支付</label>
-			<input type="radio" name="pay_style">
+			<input type="radio" name="pay_style" value="3">
 			<label class="zhifubao"></label>
-			<input type="radio" name="pay_style">
+			<input type="radio" name="pay_style" value="4">
 			<label class="bank">银行卡支付</label>
 		</div>
 	</div>
@@ -76,7 +76,7 @@
 			<li class="col05">小计</li>		
 		</ul>
 		<ul class="goods_list_td clearfix">
-			<li class="col01">1</li>			
+			<li class="col01" goods_id='1'>1</li>			
 			<li class="col02"><img src="images/goods/goods012.jpg"></li>
 			<li class="col03">奇异果</li>
 			<li class="col04">500g</li>
@@ -85,7 +85,7 @@
 			<li class="col07"><span></span>元</li>	
 		</ul>
 		<ul class="goods_list_td clearfix">
-			<li class="col01">2</li>			
+			<li class="col01" goods_id='2'>2</li>			
 			<li class="col02"><img src="images/goods/goods003.jpg"></li>
 			<li class="col03">大兴大棚草莓</li>
 			<li class="col04">500g</li>
@@ -134,27 +134,35 @@
 	<script type="text/javascript">
 		$('#order_btn').click(function() {
 			localStorage.setItem('order_finish',2);
-
-			$('.popup_con').fadeIn('fast', function() {
-
-				setTimeout(function(){
-					$('.popup_con').fadeOut('fast',function(){
-						window.location.href = 'index.html';
-					});	
-				},3000)
-				
-			});
+			var address_id = $("input[name='address_id']").val()
+			console.log(address_id)
+			var pay_style  = $("input[name='pay_style']:checked").val()
+			console.log(pay_style)
+			var goods_list = []
+			$('.goods_list_td').each(function(index, elem){
+				var goods_id = $(this).children('li.col01').attr('goods_id')
+				console.log(goods_id)
+				goods_list.push(goods_id)
+			})
+			// var goods_id = $('.goods_list_td').children('.col01').attr('goods_id')
+			// console.log(goods_id)
+			// return
+			var param = {
+				'address_id': address_id,
+				'pay_style': pay_style,
+				'goods_list': goods_list
+			}
+			$.get('', param, function(){
+				$('.popup_con').fadeIn('fast', function() {
+					setTimeout(function(){
+						$('.popup_con').fadeOut('fast',function(){
+							window.location.href = 'index.html';
+						});	
+					},3000)
+				});
+			})
 		});
 		$(function(){
-		// 	<ul class="goods_list_td clearfix">
-		// 	<li class="col01">2</li>			
-		// 	<li class="col02"><img src="images/goods/goods003.jpg"></li>
-		// 	<li class="col03">大兴大棚草莓</li>
-		// 	<li class="col04">500g</li>
-		// 	<li class="col05">16.80元</li>
-		// 	<li class="col06">1</li>
-		// 	<li class="col07">16.80元</li>	
-		// </ul>
 			var total_count = 0
 			var total_price = 0.00
 			$('.goods_list_td').each(function(index, elem){

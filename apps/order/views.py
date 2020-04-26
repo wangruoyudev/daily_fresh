@@ -4,6 +4,7 @@ from django.views.generic import View
 from apps.goods.models import GoodsSKU
 from apps.user.models import Address
 from django_redis import get_redis_connection
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -33,4 +34,11 @@ class CreateOrderView(LoginRequiredMixin, View):
         context = {'goods_sku_list': enumerate(goods_sku_list, start=1),
                    'address': address}
         return render(request, 'order/place_order.html', context)
+
+
+class SubmitOrderView(View):
+    def post(self, request):
+        print('====>SubmitOrderView-post: ', request.POST)
+        context = {'ret': 'failed'}
+        return JsonResponse(context)
 
