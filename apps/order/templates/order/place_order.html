@@ -11,7 +11,7 @@
 			<dt>寄送到：</dt>
 			{% if address %}
 				<dd><input type="radio" name="" checked="">{{default_address.addr}} （{{default_address.receiver}} 收） {{default_address.phone}}</dd>
-			{% elif %}
+			{% else %}
 				<dd><input type="radio" name="" checked="">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
 			{% endif %}
 		</dl>
