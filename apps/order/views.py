@@ -76,8 +76,9 @@ class SubmitOrderView(View):
             return JsonResponse(create_fail_msg('操作失败-找不到该支付方式'))
 
         #  todo 先生成个订单，方便下面商品模型数据外键使用
-        trade_no = '%s%s' % (datetime.now().strftime('%Y%m%d%H%M%S'), request.user.id)
+        order_id = '%s%s' % (datetime.now().strftime('%Y%m%d%H%M%S'), request.user.id)
         new_order = OrderInfo.objects.create(
+            order_id=order_id,
             user=order_user,
             addr=order_address,
             pay_method=pay_style,
@@ -85,7 +86,7 @@ class SubmitOrderView(View):
             total_price=0,
             transit_price=0.00,
             order_status=1,
-            trade_no=trade_no)
+            trade_no='')
         new_order.save()
 
         #  todo 处理购物车生成总价和数量,同时生成订单的商品模型数据
