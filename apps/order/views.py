@@ -90,15 +90,15 @@ class SubmitOrderView(View):
         new_order.save()
 
         #  todo 处理购物车生成总价和数量,同时生成订单的商品模型数据
+        conn = get_redis_connection('default')
         cart_key = 'cart_id%s' % request.user.id
         total_count = 0
         tatal_price = 0.00
         for cart_goods_id in goods_list:
-            conn = get_redis_connection('default')
             cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
             goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
             print('======>type price: ', type(goods_sku.price))
-            cart_goods_price = cart_goods_count * float(goods_sku.price)
+            cart_goods_price = cart_goods_count * goods_sku.price
             print(cart_goods_count, cart_goods_price)
             order_goods = OrderGoods.objects.create(
                 order=new_order,
@@ -108,6 +108,11 @@ class SubmitOrderView(View):
                 comment='')
             order_goods.save()
 
+            #  更新商品的库存和销量
+            goods_sku.stock -= cart_goods_count
+            goods_sku.sales += cart_goods_count
+            goods_sku.save()
+
             total_count += cart_goods_count
             tatal_price += cart_goods_price
 
@@ -116,5 +121,7 @@ class SubmitOrderView(View):
         new_order.total_count = total_count
         new_order.total_price = tatal_price
         new_order.save()
+
+        conn.hdel(cart_key, *goods_list)
 
         return JsonResponse({'ret': 'success', 'msg': '提交成功'})
