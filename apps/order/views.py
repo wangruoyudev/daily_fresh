@@ -8,6 +8,7 @@ from django_redis import get_redis_connection
 from django.http import JsonResponse
 from django_redis import get_redis_connection
 from datetime import datetime
+from django.db import transaction
 # Create your views here.
 
 
@@ -44,6 +45,7 @@ def create_fail_msg(msg):
 
 
 class SubmitOrderView(View):
+    @transaction.atomic
     def post(self, request):
         print('====>SubmitOrderView-post: ', request.POST)
         # context = {'ret': 'failed'}
@@ -75,52 +77,60 @@ class SubmitOrderView(View):
         if dict(OrderInfo.PAY_METHOD_CHOICES).get(pay_style, None) is None:
             return JsonResponse(create_fail_msg('操作失败-找不到该支付方式'))
 
-        #  todo 先生成个订单，方便下面商品模型数据外键使用
-        order_id = '%s%s' % (datetime.now().strftime('%Y%m%d%H%M%S'), request.user.id)
-        new_order = OrderInfo.objects.create(
-            order_id=order_id,
-            user=order_user,
-            addr=order_address,
-            pay_method=pay_style,
-            total_count=0,
-            total_price=0,
-            transit_price=0.00,
-            order_status=1,
-            trade_no='')
-        new_order.save()
+        save_id = transaction.savepoint()
 
-        #  todo 处理购物车生成总价和数量,同时生成订单的商品模型数据
-        conn = get_redis_connection('default')
-        cart_key = 'cart_id%s' % request.user.id
-        total_count = 0
-        tatal_price = 0
-        for cart_goods_id in goods_list:
-            cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
-            goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
-            print('======>type price: ', type(goods_sku.price))
-            cart_goods_price = cart_goods_count * goods_sku.price
-            print(cart_goods_count, cart_goods_price)
-            order_goods = OrderGoods.objects.create(
-                order=new_order,
-                sku=goods_sku,
-                count=cart_goods_count,
-                price=cart_goods_price,
-                comment='')
-            order_goods.save()
+        try:
+            #  todo 先生成个订单，方便下面商品模型数据外键使用
+            order_id = '%s%s' % (datetime.now().strftime('%Y%m%d%H%M%S'), request.user.id)
+            new_order = OrderInfo.objects.create(
+                order_id=order_id,
+                user=order_user,
+                addr=order_address,
+                pay_method=pay_style,
+                total_count=0,
+                total_price=0,
+                transit_price=0.00,
+                order_status=1,
+                trade_no='')
+            new_order.save()
 
-            #  更新商品的库存和销量
-            goods_sku.stock -= cart_goods_count
-            goods_sku.sales += cart_goods_count
-            goods_sku.save()
+            #  todo 处理购物车生成总价和数量,同时生成订单的商品模型数据
+            conn = get_redis_connection('default')
+            cart_key = 'cart_id%s' % request.user.id
+            total_count = 0
+            tatal_price = 0.00
+            for cart_goods_id in goods_list:
+                cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
+                goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
+                print('======>type price: ', type(goods_sku.price))
+                cart_goods_price = cart_goods_count * goods_sku.price
+                print(cart_goods_count, cart_goods_price)
+                order_goods = OrderGoods.objects.create(
+                    order=new_order,
+                    sku=goods_sku,
+                    count=cart_goods_count,
+                    price=cart_goods_price,
+                    comment='')
+                order_goods.save()
 
-            total_count += cart_goods_count
-            tatal_price += cart_goods_price
+                #  更新商品的库存和销量
+                goods_sku.stock -= cart_goods_count
+                goods_sku.sales += cart_goods_count
+                goods_sku.save()
 
-        print(total_count, '%.2f' % tatal_price)
+                total_count += cart_goods_count
+                tatal_price += cart_goods_price
 
-        new_order.total_count = total_count
-        new_order.total_price = tatal_price
-        new_order.save()
+            print(total_count, '%.2f' % tatal_price)
+
+            new_order.total_count = total_count
+            new_order.total_price = tatal_price
+            new_order.save()
+        except Exception:
+            transaction.savepoint_rollback(save_id)
+            return JsonResponse(create_fail_msg('操作失败-提交订单失败'))
+
+        transaction.savepoint_commit(save_id)
 
         conn.hdel(cart_key, *goods_list)
 
