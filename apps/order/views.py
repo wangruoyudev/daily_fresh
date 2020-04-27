@@ -126,8 +126,9 @@ class SubmitOrderView(View):
             new_order.total_count = total_count
             new_order.total_price = tatal_price
             new_order.save()
-        except Exception:
+        except Exception as e:
             transaction.savepoint_rollback(save_id)
+            print(e)
             return JsonResponse(create_fail_msg('操作失败-提交订单失败'))
 
         transaction.savepoint_commit(save_id)
