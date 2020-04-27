@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from apps.goods.models import GoodsSKU
-from apps.user.models import Address
+from apps.user.models import Address, User
+from apps.order.models import OrderInfo, OrderGoods
 from django_redis import get_redis_connection
 from django.http import JsonResponse
+from django_redis import get_redis_connection
+from datetime import datetime
 # Create your views here.
 
 
@@ -36,13 +39,79 @@ class CreateOrderView(LoginRequiredMixin, View):
         return render(request, 'order/place_order.html', context)
 
 
+def create_fail_msg(msg):
+    return {'ret': 'failed', 'msg': msg}
+
+
 class SubmitOrderView(View):
     def post(self, request):
         print('====>SubmitOrderView-post: ', request.POST)
-        context = {'ret': 'failed'}
+        # context = {'ret': 'failed'}
+        if not request.user.is_authenticated:
+            return JsonResponse(create_fail_msg('操作失败-用户没登陆'))
         address_id = request.POST.get('address_id', None)
         pay_style = request.POST.get('pay_style', None)
         goods_list = request.POST.getlist('goods_list', [])
         print(address_id, pay_style, goods_list)
-        return JsonResponse(context)
 
+        if not all([address_id, pay_style, goods_list]):
+            return JsonResponse(create_fail_msg('操作失败-提交的数据有误'))
+
+        #  todo 找到外键user和address
+        try:
+            order_user = User.objects.get(id=request.user.id)
+            order_address = Address.objects.get(id=address_id)
+        except User.DoesNotExist:
+            return JsonResponse(create_fail_msg('操作失败-登录的用户找不到'))
+        except Address.DoesNotExist:
+            return JsonResponse(create_fail_msg('操作失败-提交的地址无效'))
+
+        #  todo 判断支付方式
+        try:
+            pay_style = int(pay_style)
+        except ValueError:
+            return JsonResponse(create_fail_msg('操作失败-提交的支付方式非法'))
+
+        if dict(OrderInfo.PAY_METHOD_CHOICES).get(pay_style, None) is None:
+            return JsonResponse(create_fail_msg('操作失败-找不到该支付方式'))
+
+        #  todo 先生成个订单，方便下面商品模型数据外键使用
+        trade_no = '%s%s' % (datetime.now().strftime('%Y%m%d%H%M%S'), request.user.id)
+        new_order = OrderInfo.objects.create(
+            user=order_user,
+            addr=order_address,
+            pay_method=pay_style,
+            total_count=0,
+            total_price=0,
+            transit_price=0.00,
+            order_status=1,
+            trade_no=trade_no)
+        new_order.save()
+
+        #  todo 处理购物车生成总价和数量,同时生成订单的商品模型数据
+        cart_key = 'cart_id%s' % request.user.id
+        total_count = 0
+        tatal_price = 0.00
+        for cart_goods in goods_list:
+            conn = get_redis_connection('default')
+            cart_goods_count = int(conn.hget(cart_key, cart_goods.id))
+            goods_sku = GoodsSKU.objects.get(id=cart_goods.id)
+            cart_goods_price = cart_goods_count * goods_sku.price
+            order_goods = OrderGoods.objects.create(
+                order=new_order,
+                sku=goods_sku,
+                count=cart_goods_count,
+                price=cart_goods_price,
+                comment='')
+            order_goods.save()
+
+            total_count += cart_goods_count
+            tatal_price += cart_goods_price
+
+        print(total_count, '%.2f' % tatal_price)
+
+        new_order.total_count = total_count
+        new_order.total_price = tatal_price
+        new_order.save()
+
+        return JsonResponse({'ret': 'success', 'msg': '提交成功'})
