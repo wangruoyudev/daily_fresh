@@ -96,7 +96,9 @@ class SubmitOrderView(View):
             conn = get_redis_connection('default')
             cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
             goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
-            cart_goods_price = cart_goods_count * goods_sku.price
+            print('======>type price: ', type(goods_sku.price))
+            cart_goods_price = cart_goods_count * float(goods_sku.price)
+            print(cart_goods_count, cart_goods_price)
             order_goods = OrderGoods.objects.create(
                 order=new_order,
                 sku=goods_sku,
