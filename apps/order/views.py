@@ -32,7 +32,8 @@ class CreateOrderView(LoginRequiredMixin, View):
                     continue
         print('====>goods_sku_list:', goods_sku_list)
         try:
-            address = Address.objects.get(is_default=True)
+            address_user = User.objects.get(id=request.user.id)
+            address = address_user.address_set.get(is_default=True)
         except Address.DoesNotExist:
             address = None
         context = {'goods_sku_list': enumerate(goods_sku_list, start=1),
