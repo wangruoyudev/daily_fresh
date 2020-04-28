@@ -62,7 +62,7 @@ class SubmitOrderView(View):
         #  todo 找到外键user和address
         try:
             order_user = User.objects.get(id=request.user.id)
-            order_address = Address.objects.get(id=address_id)
+            order_address = order_user.address_set.get(id=address_id)
         except User.DoesNotExist:
             return JsonResponse(create_fail_msg('操作失败-登录的用户找不到'))
         except Address.DoesNotExist:
