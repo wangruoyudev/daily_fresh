@@ -184,9 +184,14 @@ class UserOrder(LoginRequiredMixin, View):
 
 class UserAddress(LoginRequiredMixin, View):
     def get(self, request):
-        address_list = Address.objects.filter(id=request.user.id)
         try:
-            default_address = Address.objects.get(id=request.user.id, is_default=True)
+            address_user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return HttpResponse('找不到该用户')
+
+        address_list = address_user.address_set.all()  # 读取该用户下面的所有地址
+        try:
+            default_address = address_list.get(is_default=True)  # 读取默认的那个地址
         except Address.DoesNotExist:
             default_address = None
         return render(request,
@@ -227,10 +232,15 @@ class SetDefaultAddress(View):
         if not request.user.is_authenticated:
             return JsonResponse(context)
 
+        try:
+            address_user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return JsonResponse(context)
+
         address_id = request.POST.get('address_id', None)
         if address_id:
             try:
-                last_default_address = Address.objects.get(is_default=True)
+                last_default_address = address_user.address_set.get(is_default=True)
             except Address.DoesNotExist:
                 last_default_address = None
 
