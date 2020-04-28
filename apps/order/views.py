@@ -101,8 +101,14 @@ class SubmitOrderView(View):
             tatal_price = 0
             for cart_goods_id in goods_list:
                 cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
-                goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
-                print('======>type price: ', type(goods_sku.price))
+                # goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
+                goods_sku = GoodsSKU.objects.select_for_update().get(id=cart_goods_id)
+                import time
+                time.sleep(10)
+                if cart_goods_count > goods_sku.stock:
+                    transaction.savepoint_rollback(save_id)
+                    return JsonResponse(create_fail_msg('操作失败-商品库存不足'))
+
                 cart_goods_price = cart_goods_count * goods_sku.price
                 print(cart_goods_count, cart_goods_price)
                 order_goods = OrderGoods.objects.create(
