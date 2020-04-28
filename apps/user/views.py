@@ -184,9 +184,9 @@ class UserOrder(LoginRequiredMixin, View):
 
 class UserAddress(LoginRequiredMixin, View):
     def get(self, request):
-        address_list = Address.objects.all()
+        address_list = Address.objects.filter(id=request.user.id)
         try:
-            default_address = Address.objects.get(is_default=True)
+            default_address = Address.objects.get(id=request.user.id, is_default=True)
         except Address.DoesNotExist:
             default_address = None
         return render(request,
