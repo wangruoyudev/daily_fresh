@@ -109,8 +109,8 @@
 						});
 					},2000)
 			});
-			}, function(){
-				alert('操作失败了')
+			}, function(msg){
+				alert('操作失败了-' + msg)
 			})
 		});
 		$(function(){
@@ -147,7 +147,7 @@
 			$.post(url, param, function (data) {
 				console.log(data)
 				if(data['ret'] === 'failed') {
-					failFun()
+					failFun(data['msg'])
 				}else if (data['ret'] === 'success'){
 					successFun()
 				}
