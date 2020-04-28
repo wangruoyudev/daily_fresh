@@ -129,7 +129,7 @@ class RegisterView(View):
         return render(request, 'user/reg_success.html')
 
 
-class ActiveAccount(LoginRequiredMixin, View):
+class ActiveAccount(View):
     def get(self, request, token):
         serializer = Serializer(settings.SECRET_KEY)
         try:
