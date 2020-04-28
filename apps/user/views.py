@@ -3,6 +3,7 @@ from django.views.generic import View
 from apps.user.models import User
 from apps.goods.models import GoodsType, GoodsSKU
 from apps.user.models import Address
+from apps.order.models import OrderGoods, OrderInfo
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from django.conf import settings
 from itsdangerous import SignatureExpired
@@ -172,9 +173,13 @@ class UserInfo(LoginRequiredMixin, View):
 
 class UserOrder(LoginRequiredMixin, View):
     def get(self, request):
+        order_user = User.objects.get(id=request.user.id)
+        user_order_queryset = order_user.orderinfo_set.all()
+
         return render(request,
                       'user/user_center_order.html',
-                      {'page': 'order'})
+                      {'page': 'order',
+                       'user_order_queryset': user_order_queryset})
 
 
 class UserAddress(LoginRequiredMixin, View):

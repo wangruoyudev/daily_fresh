@@ -98,7 +98,7 @@ class SubmitOrderView(View):
             conn = get_redis_connection('default')
             cart_key = 'cart_id%s' % request.user.id
             total_count = 0
-            tatal_price = 0.00
+            tatal_price = 0
             for cart_goods_id in goods_list:
                 cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
                 goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
