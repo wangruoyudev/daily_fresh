@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_redis import get_redis_connection
+from django.core.paginator import Paginator
 
 
 class LoginView(View):
@@ -173,8 +174,8 @@ class UserInfo(LoginRequiredMixin, View):
 
 class UserOrder(LoginRequiredMixin, View):
     def get(self, request):
-        order_user = User.objects.get(id=request.user.id)
-        user_order_queryset = order_user.orderinfo_set.all()
+        # order_user = User.objects.get(id=request.user.id)
+        user_order_queryset = request.user.orderinfo_set.all()
 
         return render(request,
                       'user/user_center_order.html',
