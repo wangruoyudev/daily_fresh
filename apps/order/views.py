@@ -122,8 +122,10 @@ class SubmitOrderView(View):
                     # goods_sku.save()
 
                     #  todo 只有当刚刚查到的库存跟现在的存库相等的时候才更新
+                    print('开始实行乐观查询')
                     row = GoodsSKU.objects.filter(id=goods_sku.id, stock=goods_sku.stock)\
                         .update(stock=goods_sku.stock-1, sales=goods_sku.sales+1)
+                    print('乐观查询结束')
                     print('第%d次,结果为%s' % (i, row))
                     if row == 0:
                         if i == 2:
@@ -145,7 +147,7 @@ class SubmitOrderView(View):
                     tatal_price += cart_goods_price
 
                     break
-            print(total_count, '%.2f' % tatal_price)
+            print('购物车总数量和价格', total_count, '%.2f' % tatal_price)
 
             new_order.total_count = total_count
             new_order.total_price = tatal_price
