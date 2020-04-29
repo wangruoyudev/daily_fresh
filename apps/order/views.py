@@ -110,7 +110,7 @@ class SubmitOrderView(View):
                     # todo  尝试一下乐观锁，正常读取
                     goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
                     import time
-                    time.sleep(10)
+                    time.sleep(5)
                     #  todo # 比较一下要买的数量和库存
                     if cart_goods_count > goods_sku.stock:
                         transaction.savepoint_rollback(save_id)
@@ -158,5 +158,8 @@ class SubmitOrderView(View):
         transaction.savepoint_commit(save_id)
 
         conn.hdel(cart_key, *goods_list)
+
+        print('视图结束前延迟5S')
+        time.sleep(5)
 
         return JsonResponse({'ret': 'success', 'msg': '提交成功'})
