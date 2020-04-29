@@ -48,7 +48,7 @@ def create_fail_msg(msg):
 class SubmitOrderView(View):
     @transaction.atomic
     def post(self, request):
-        print('====>SubmitOrderView-post: ', request.POST)
+        print('====>SubmitOrderView-post: ', request.POST, datetime.now())
         # context = {'ret': 'failed'}
         if not request.user.is_authenticated:
             return JsonResponse(create_fail_msg('操作失败-用户没登陆'))
@@ -122,11 +122,11 @@ class SubmitOrderView(View):
                     # goods_sku.save()
 
                     #  todo 只有当刚刚查到的库存跟现在的存库相等的时候才更新
-                    print('开始实行乐观查询')
+                    print('开始实行乐观查询', datetime.now())
                     row = GoodsSKU.objects.filter(id=goods_sku.id, stock=goods_sku.stock)\
                         .update(stock=goods_sku.stock-1, sales=goods_sku.sales+1)
-                    print('乐观查询结束')
-                    print('第%d次,结果为%s' % (i, row))
+                    print('乐观查询结束', datetime.now())
+                    print('第%d次,结果为%s' % (i, row), datetime.now())
                     if row == 0:
                         if i == 2:
                             transaction.savepoint_rollback(save_id)
@@ -147,7 +147,7 @@ class SubmitOrderView(View):
                     tatal_price += cart_goods_price
 
                     break
-            print('购物车总数量和价格', total_count, '%.2f' % tatal_price)
+            print('购物车总数量和价格', total_count, '%.2f' % tatal_price, datetime.now())
 
             new_order.total_count = total_count
             new_order.total_price = tatal_price
@@ -161,7 +161,7 @@ class SubmitOrderView(View):
 
         conn.hdel(cart_key, *goods_list)
 
-        print('视图结束前延迟5S')
+        print('视图结束前延迟5S', datetime.now())
         time.sleep(5)
 
         return JsonResponse({'ret': 'success', 'msg': '提交成功'})

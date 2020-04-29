@@ -18,7 +18,9 @@ ORDER_STATUS_CHOICS = (
         (5, '已完成')
     )
 
-print(ORDER_STATUS_CHOICS.keys())
+# print(ORDER_STATUS_CHOICS.keys())
 
 # a = datetime.now().strftime('%Y%m%d%H%M%S')
 # print(a)
+
+print(datetime.now())
