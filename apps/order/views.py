@@ -103,9 +103,13 @@ class SubmitOrderView(View):
             for cart_goods_id in goods_list:
                 cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
                 # goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
-                goods_sku = GoodsSKU.objects.select_for_update().get(id=cart_goods_id)
+                # todo 悲观锁，这里会阻塞， 事务结束后会解阻塞
+                # goods_sku = GoodsSKU.objects.select_for_update().get(id=cart_goods_id)
+                # todo  尝试一下乐观锁，正常读取
+                goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
                 import time
                 time.sleep(10)
+                #  todo # 比较一下要买的数量和库存
                 if cart_goods_count > goods_sku.stock:
                     transaction.savepoint_rollback(save_id)
                     return JsonResponse(create_fail_msg('操作失败-商品库存不足'))
@@ -121,9 +125,16 @@ class SubmitOrderView(View):
                 order_goods.save()
 
                 #  更新商品的库存和销量
-                goods_sku.stock -= cart_goods_count
-                goods_sku.sales += cart_goods_count
-                goods_sku.save()
+                # goods_sku.stock -= cart_goods_count
+                # goods_sku.sales += cart_goods_count
+                # goods_sku.save()
+
+                #  todo 只有当刚刚查到的库存跟现在的存库相等的时候才更新
+                row = GoodsSKU.objects.filter(id=goods_sku.id, stock=goods_sku.stock)\
+                    .update(stock=goods_sku.stock-1, sales=goods_sku.sales+1)
+                if row == 0:
+                    transaction.savepoint_rollback(save_id)
+                    return JsonResponse(create_fail_msg('操作失败-库存已经发生了变化'))
 
                 total_count += cart_goods_count
                 tatal_price += cart_goods_price
