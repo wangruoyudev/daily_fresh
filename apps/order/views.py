@@ -124,6 +124,7 @@ class SubmitOrderView(View):
                     #  todo 只有当刚刚查到的库存跟现在的存库相等的时候才更新
                     row = GoodsSKU.objects.filter(id=goods_sku.id, stock=goods_sku.stock)\
                         .update(stock=goods_sku.stock-1, sales=goods_sku.sales+1)
+                    print('第%d次,结果为%s' % (i, row))
                     if row == 0:
                         if i == 2:
                             transaction.savepoint_rollback(save_id)
