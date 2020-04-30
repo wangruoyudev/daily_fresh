@@ -173,14 +173,42 @@ class UserInfo(LoginRequiredMixin, View):
 
 
 class UserOrder(LoginRequiredMixin, View):
-    def get(self, request):
+    def get(self, request, page_num):
         # order_user = User.objects.get(id=request.user.id)
         user_order_queryset = request.user.orderinfo_set.all()
 
+        paginator = Paginator(user_order_queryset, 3)
+
+        try:
+            page_num = int(page_num)
+        except ValueError:
+            page_num = 1
+
+        #  todo 这里加一个if elif的处理是为了自己生成显示的页码
+        if page_num <= 0:  #  这里加这个处理主要是下面这个方法处理0一下的页码为最大页码
+            page_num = 1
+        elif page_num > paginator.num_pages:
+            page_num = paginator.num_pages
+
+        order_page = paginator.get_page(int(page_num))
+
+        total_pages = paginator.num_pages
+        if total_pages < 5:
+            pages = range(1, total_pages + 1)
+        elif page_num <= 3:
+            pages = range(1, 6)
+        elif total_pages - page_num <= 2:
+            pages = range(total_pages - 4, total_pages + 1)
+        else:
+            pages = range(page_num - 2, page_num + 3)
+
+        context = {
+            'user_order_queryset': order_page,
+            'pages': pages,
+        }
+
         return render(request,
-                      'user/user_center_order.html',
-                      {'page': 'order',
-                       'user_order_queryset': user_order_queryset})
+                      'user/user_center_order.html', context)
 
 
 class UserAddress(LoginRequiredMixin, View):
@@ -241,7 +269,8 @@ class SetDefaultAddress(View):
         address_id = request.POST.get('address_id', None)
         if address_id:
             try:
-                last_default_address = address_user.address_set.get(is_default=True)
+                last_default_address = address_user.address_set.get(
+                    is_default=True)
             except Address.DoesNotExist:
                 last_default_address = None
 
