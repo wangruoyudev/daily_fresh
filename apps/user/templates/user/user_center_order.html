@@ -16,7 +16,7 @@
 				<td width="55%">
 					{% for order_goods in order_info.ordergoods_set.all %}
 					<ul class="order_goods_list clearfix">
-						<li class="col01"><img src="{{order_goods.sku.image.url}}"></li>
+						<li class="col01"><a href="{% url 'goods:detail' order_goods.sku.id %}"><img src="{{order_goods.sku.image.url}}"></a></li>
 						<li class="col02">{{order_goods.sku.name}}<em>{{order_goods.sku.price}}元/{{order_goods.sku.unite}}</em></li>
 						<li class="col03">{{order_goods.count}}</li>
 						<li class="col04">{{order_goods.price}}元</li>

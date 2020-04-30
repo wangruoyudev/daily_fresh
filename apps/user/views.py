@@ -190,7 +190,7 @@ class UserOrder(LoginRequiredMixin, View):
         elif page_num > paginator.num_pages:
             page_num = paginator.num_pages
 
-        order_page = paginator.get_page(int(page_num))
+        order_page = paginator.get_page(page_num)
 
         for per_order in order_page:
             per_order.payment_status = OrderInfo.ORDER_STATUS[per_order.order_status]
