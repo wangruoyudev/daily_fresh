@@ -192,6 +192,9 @@ class UserOrder(LoginRequiredMixin, View):
 
         order_page = paginator.get_page(int(page_num))
 
+        for per_order in order_page:
+            per_order.payment_status = OrderInfo.ORDER_STATUS[per_order.order_status]
+
         total_pages = paginator.num_pages
         if total_pages < 5:
             pages = range(1, total_pages + 1)

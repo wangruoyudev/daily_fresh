@@ -7,7 +7,7 @@
 	<ul class="order_list_th w978 clearfix">
 		<li class="col01">{{order_info.create_time}}</li>
 		<li class="col02">订单号：{{order_info.order_id}}</li>
-		<li class="col02 stress">未支付</li>
+		<li class="col02 stress">{{order_info.payment_status}}</li>
 	</ul>
 
 	<table class="order_list_table w980">
@@ -24,7 +24,7 @@
 					{% endfor %}
 				</td>
 				<td width="15%">{{order_info.total_price}}元</td>
-				<td width="15%">待付款</td>
+				<td width="15%">{{order_info.payment_status}}</td>
 				<td width="15%"><a href="#" class="oper_btn">去付款</a></td>
 			</tr>
 		</tbody>
@@ -33,13 +33,19 @@
 
 
 	<div class="pagenation">
-		<a href="#"><上一页</a>
-		<a href="#" class="active">1</a>
-		<a href="#">2</a>
-		<a href="#">3</a>
-		<a href="#">4</a>
-		<a href="#">5</a>
-		<a href="#">下一页></a>
+		{% if user_order_queryset.has_previous %}
+		<a href="{% url 'user:order' user_order_queryset.previous_page_number %}"><上一页</a>
+		{% endif %}
+		{% for pindex in pages %}
+			{% if pindex == user_order_queryset.number %}
+				<a href="{% url 'user:order' pindex %}" class="active">{{pindex}}</a>
+			{% else %}
+				<a href="{% url 'user:order' pindex %}">{{pindex}}</a>
+			{% endif %}
+		{% endfor %}
+		{% if user_order_queryset.has_next %}
+		<a href="{% url 'user:order' user_order_queryset.next_page_number %}"><下一页</a>
+		{% endif %}
 	</div>
 </div>
 {% endblock right_content %}
