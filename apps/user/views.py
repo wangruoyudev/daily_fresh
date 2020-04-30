@@ -175,7 +175,7 @@ class UserInfo(LoginRequiredMixin, View):
 class UserOrder(LoginRequiredMixin, View):
     def get(self, request, page_num):
         # order_user = User.objects.get(id=request.user.id)
-        user_order_queryset = request.user.orderinfo_set.all()
+        user_order_queryset = request.user.orderinfo_set.all().order_by('-create_time')
 
         paginator = Paginator(user_order_queryset, 3)
 
