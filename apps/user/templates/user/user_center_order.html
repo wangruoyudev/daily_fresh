@@ -25,7 +25,7 @@
 				</td>
 				<td width="15%">{{order_info.total_price}}元</td>
 				<td width="15%">{{order_info.payment_status}}</td>
-				<td width="15%"><a href="#" class="oper_btn">去付款</a></td>
+				<td width="15%"><a href="#" orderId="{{order_info.order_id}}" class="oper_btn">去付款</a></td>
 			</tr>
 		</tbody>
 	</table>
@@ -49,3 +49,44 @@
 	</div>
 </div>
 {% endblock right_content %}
+{% block bottomfiles %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+{% csrf_token %}
+	<script type="text/javascript">
+		$(function(){
+			$('.oper_btn').click(function(){
+			var self = $(this)
+				var param = {
+					'order_id': $(this).attr('orderId')
+				}
+				ajaxPost('/order/pay_order', param, function(data){
+					console.log(data)
+				}, function(){
+					alert('操作失败了')
+				})
+			})
+			function csrfSafeMethod(method) {
+				// these HTTP methods do not require CSRF protection
+				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			function ajaxPost(url, param, successFun, failFun) {
+				var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+				$.ajaxSetup({
+					beforeSend: function(xhr, settings) {
+						if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+								xhr.setRequestHeader("X-CSRFToken", csrftoken);
+						}
+					}
+				});
+				$.post(url, param, function (data) {
+					console.log(data)
+					if(data['ret'] === 'failed') {
+						failFun()
+					}else if (data['ret'] === 'success'){
+						successFun(data)
+					}
+				})
+			}
+		})
+	</script>
+{% endblock bottomfiles %}

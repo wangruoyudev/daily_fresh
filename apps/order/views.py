@@ -9,6 +9,9 @@ from django.http import JsonResponse
 from django_redis import get_redis_connection
 from datetime import datetime
 from django.db import transaction
+from alipay import AliPay
+import os
+from django.conf import settings
 # Create your views here.
 
 
@@ -165,3 +168,42 @@ class SubmitOrderView(View):
         # time.sleep(5)
 
         return JsonResponse({'ret': 'success', 'msg': '提交成功'})
+
+
+app_private_key_string = open(os.path.join(settings.BASE_DIR, 'apps/order/app_private_key.pem')).read()
+alipay_public_key_string = open(os.path.join(settings.BASE_DIR, 'ali_public_key.pem')).read()
+
+
+class AliPayView(View):
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return JsonResponse(create_fail_msg('用户未登录'))
+
+        order_id = request.POST.get('order_id', None)
+        if order_id is None:
+            return JsonResponse(create_fail_msg('订单无效'))
+
+        try:
+            pay_order = OrderInfo.objects.get(id=order_id)
+        except OrderInfo.DoesNotExist:
+            return JsonResponse(create_fail_msg('该订单不存在'))
+
+        alipay = AliPay(
+            appid="2016102300743845",
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=app_private_key_string,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=alipay_public_key_string,
+            sign_type="RSA",  # RSA 或者 RSA2
+            debug=True,  # 默认False
+        )
+        alipay_ret = alipay.api_alipay_trade_page_pay(
+            subject="测试订单",
+            out_trade_no=pay_order.order_id,
+            total_amount=str(pay_order.total_price),
+        )
+
+        print('===>alipay_ret:', alipay_ret)
+
+        context = {'ret': 'success', 'msg': '提交成功'}
+        return JsonResponse(context)
