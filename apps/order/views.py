@@ -209,5 +209,7 @@ class AliPayView(View):
 
         print('===>alipay_ret:', alipay_ret)
 
-        context = {'ret': 'success', 'msg': '提交成功'}
+        ali_url = 'https://openapi.alipaydev.com/gateway.do?%s' % alipay_ret
+
+        context = {'ret': 'success', 'msg': '提交成功', 'ali_url': ali_url}
         return JsonResponse(context)

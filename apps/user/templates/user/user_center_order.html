@@ -61,6 +61,7 @@
 				}
 				ajaxPost('/order/pay_order/', param, function(data){
 					console.log(data)
+					window.open(data['ali_url'])
 				}, function(){
 					alert('操作失败了')
 				})
