@@ -59,7 +59,7 @@
 				var param = {
 					'order_id': $(this).attr('orderId')
 				}
-				ajaxPost('/order/pay_order', param, function(data){
+				ajaxPost('/order/pay_order/', param, function(data){
 					console.log(data)
 				}, function(){
 					alert('操作失败了')
