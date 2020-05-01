@@ -183,10 +183,14 @@ class AliPayView(View):
         if order_id is None:
             return JsonResponse(create_fail_msg('订单无效'))
 
+        print('======>order_id:', order_id)
+
         try:
-            pay_order = OrderInfo.objects.get(id=order_id)
+            pay_order = OrderInfo.objects.get(order_id=order_id)
         except OrderInfo.DoesNotExist:
             return JsonResponse(create_fail_msg('该订单不存在'))
+
+        print('====>pay_order', pay_order)
 
         alipay = AliPay(
             appid="2016102300743845",
