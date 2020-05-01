@@ -171,7 +171,7 @@ class SubmitOrderView(View):
 
 
 app_private_key_string = open(os.path.join(settings.BASE_DIR, 'apps/order/app_private_key.pem')).read()
-alipay_public_key_string = open(os.path.join(settings.BASE_DIR, 'ali_public_key.pem')).read()
+alipay_public_key_string = open(os.path.join(settings.BASE_DIR, 'apps/order/ali_public_key.pem')).read()
 
 
 class AliPayView(View):
