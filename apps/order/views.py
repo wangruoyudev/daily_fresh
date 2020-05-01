@@ -198,7 +198,7 @@ class AliPayView(View):
             app_private_key_string=app_private_key_string,
             # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
             alipay_public_key_string=alipay_public_key_string,
-            sign_type="RSA",  # RSA 或者 RSA2
+            sign_type="RSA2",  # RSA 或者 RSA2
             debug=True,  # 默认False
         )
         alipay_ret = alipay.api_alipay_trade_page_pay(
