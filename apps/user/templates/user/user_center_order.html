@@ -86,7 +86,7 @@
 						alert(data['msg'])
 					})
 				} else if ($(this).attr('order_status') === '4') {
-						location.href = '/order/evaluate_order/' + '?order_id=' + $(this).attr('orderId')
+						location.href = '/order/evaluate_order/' + $(this).attr('orderId')
 				}
 			})
 			function csrfSafeMethod(method) {
