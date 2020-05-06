@@ -272,7 +272,7 @@ class OrderEvaluate(View):
             return HttpResponse('出错了-订单不存在')
         evaluate_order.payment_status = OrderInfo.ORDER_STATUS[evaluate_order.order_status]
         context = {
-            'order': evaluate_order,
+            'evaluate_order': evaluate_order,
         }
         return render(request, 'user/user_order_comment.html', context)
 
