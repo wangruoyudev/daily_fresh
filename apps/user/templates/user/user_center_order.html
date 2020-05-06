@@ -26,9 +26,11 @@
 				<td width="15%">{{order_info.total_price}}元</td>
 				<td width="15%">{{order_info.payment_status}}</td>
 				<td width="15%">
-					<a href="javascript:" orderId="{{order_info.order_id}}" class="oper_btn">
+					<a href="javascript:" orderId="{{order_info.order_id}}" order_status="{{order_info.order_status}}" class="oper_btn">
 					{% if order_info.order_status == 4 %}
 						去评价
+					{% elif order_info.order_status == 5 %}
+						已完成
 					{% else %}
 						去付款
 					{% endif %}
@@ -63,23 +65,27 @@
 	<script type="text/javascript">
 		$(function(){
 			$('.oper_btn').click(function(){
-			var self = $(this)
-				var param = {
-					'order_id': $(this).attr('orderId')
-				}
-				ajaxPost('/order/pay_order/', param, function(data){
-					console.log(data)
-					window.open(data['ali_url'])
-					$.get('/order/query_order/', param, function(data){
-						if (data['code'] === '0') {
-							window.location.reload()
-						} else {
-							alert(data['msg'])
-						}
+				if ($(this).attr('order_status') === 1) {
+					var self = $(this)
+					var param = {
+						'order_id': $(this).attr('orderId')
+					}
+					ajaxPost('/order/pay_order/', param, function(data){
+						console.log(data)
+						window.open(data['ali_url'])
+						$.get('/order/query_order/', param, function(data){
+							if (data['code'] === '0') {
+								window.location.reload()
+							} else {
+								alert(data['msg'])
+							}
+						})
+					}, function(data){
+						alert(data['msg'])
 					})
-				}, function(data){
-					alert(data['msg'])
-				})
+				} else if ($(this).attr('order_status') === 4) {
+						location.href = '/order/evaluate_order/' + '?order_id=' + $(this).attr('orderId')
+				}
 			})
 			function csrfSafeMethod(method) {
 				// these HTTP methods do not require CSRF protection

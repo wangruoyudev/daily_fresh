@@ -656,3 +656,10 @@ html,body{height:100%}
 .for_goods_id{
     display: none;
 }
+
+.label_evaluate_title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 15px;
+}

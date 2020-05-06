@@ -1,0 +1,51 @@
+{% extends 'base_user_center.html' %}
+{% load static %}
+{% block right_content %}
+<div class="right_content clearfix">
+	<h3 class="common_title2">全部订单</h3>
+	{% for order_info in user_order_queryset %}
+	<ul class="order_list_th w978 clearfix">
+		<li class="col01">{{evaluate_order.create_time}}</li>
+		<li class="col02">订单号：{{evaluate_order.order_id}}</li>
+		<li class="col02 stress">{{evaluate_order.payment_status}}</li>
+	</ul>
+  <form action="{% url 'order:evaluate_order' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name='order_id' value="{{evaluate_order.order_id}}">
+    <input type="hidden" name='total_count' value="{{evaluate_order.ordergoods_set.all | LENGTH}}">
+    {% for order_goods in evaluate_order.ordergoods_set.all %}
+    <div style="margin-bottom:40px;">
+      <table class="order_list_table w980">
+        <tbody>
+          <tr>
+            <td width="55%">
+              <ul class="order_goods_list clearfix">
+                <li class="col01"><a href="{% url 'goods:detail' order_goods.sku.id %}"><img src="{{order_goods.sku.image.url}}"></a></li>
+                <li class="col02">{{order_goods.sku.name}}<em>{{order_goods.sku.price}}元/{{order_goods.sku.unite}}</em></li>
+                <li class="col03">{{order_goods.count}}</li>
+                <li class="col04">{{order_goods.price}}元</li>
+              </ul>
+            </td>
+            <td width="15%">{{order_info.total_price}}元</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="display:flex; margin-top:20px;">
+          <label for="" class="label_evaluate_title">评价内容</label>
+          <textarea name="evaluate" id="" cols="60" rows="6"></textarea>
+      </div>
+    </div>
+    {% endfor %}
+    <input type="submit" name="" value="提交" class="info_submit">
+  </form>
+
+</div>
+{% endblock right_content %}
+{% block bottomfiles %}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript">
+		$(function(){
+			console.log('enter evaluate order')
+		})
+	</script>
+{% endblock bottomfiles %}

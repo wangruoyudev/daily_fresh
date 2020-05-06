@@ -5,7 +5,7 @@ from apps.goods.models import GoodsSKU
 from apps.user.models import Address, User
 from apps.order.models import OrderInfo, OrderGoods
 from django_redis import get_redis_connection
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django_redis import get_redis_connection
 from datetime import datetime
 from django.db import transaction
@@ -261,5 +261,27 @@ class QueryTradeStatus(View):
                 continue
 
         return JsonResponse(create_return_ajax('failed', '3', '付款失败'))
+
+
+class OrderEvaluate(View):
+    def get(self, request, order_id):
+        print('====>order_id:', order_id)
+        try:
+            evaluate_order = OrderInfo.objects.get(order_id=order_id)
+        except OrderInfo.DoesNotExist:
+            return HttpResponse('出错了-订单不存在')
+        evaluate_order.payment_status = OrderInfo.ORDER_STATUS[evaluate_order.order_status]
+        context = {
+            'order': evaluate_order,
+        }
+        return render(request, 'user/user_order_comment.html', context)
+
+    def post(self, request):
+        print('====>OrderEvaluate-post:', request.POST)
+        order_id = request.POST.get('order_id', None)
+        if order_id is None:
+            return HttpResponse('出错了-订单号为空')
+
+        return HttpResponse('出错了')
 
 
