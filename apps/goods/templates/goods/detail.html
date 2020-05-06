@@ -125,36 +125,34 @@
 			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 		}
 		$('#add_cart').click(function(){
-		var csrftoken = $("[name='csrfmiddlewaretoken']").val()
-		$.ajaxSetup({
-				beforeSend: function(xhr, settings) {
-						if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-								xhr.setRequestHeader("X-CSRFToken", csrftoken);
-						}
-				}
-		});
-		$.post('/goods/add_cart/', {
-				'goods_id': $('.for_goods_id').text(),
-				'add_count': $('.num_show').val()
-			}, function (data) {
-				console.log('====>jsondata:')
-				if (data['ret'] === 'failed' && data['code'] === '1') {
-					location.href = '/user/login/'
-					return
-				}
-				console.log(data)
-				$('#show_count').html(data.goods_count);
-			})
-		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
-			$(".add_jump").stop().animate({
-				'left': $to_y+7,
-				'top': $to_x+7},
-				"fast", function() {
-					$(".add_jump").fadeOut('fast',function(){
-<!--						$('#show_count').html(2);-->
-					});
-
+			var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+			$.ajaxSetup({
+					beforeSend: function(xhr, settings) {
+							if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+									xhr.setRequestHeader("X-CSRFToken", csrftoken);
+							}
+					}
 			});
+			$.post('/goods/add_cart/', {
+					'goods_id': $('.for_goods_id').text(),
+					'add_count': $('.num_show').val()
+				}, function (data) {
+					console.log('====>jsondata:')
+					if (data['ret'] === 'failed' && data['code'] === '1') {
+						location.href = '/user/login/'
+						return
+					}
+					console.log(data)
+					$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+					$(".add_jump").stop().animate({
+						'left': $to_y+7,
+						'top': $to_x+7},
+						"fast", function() {
+							$(".add_jump").fadeOut('fast',function(){
+								$('#show_count').html(data.goods_count);	
+							});
+					});
+			})
 		})
 	</script>
 {% endblock bottomfiles %}
