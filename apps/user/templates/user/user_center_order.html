@@ -63,8 +63,12 @@
 					console.log(data)
 					window.open(data['ali_url'])
 					$.get('/order/query_order/', param, function(data){
-						console.log(data)
-						location.href = '/user/order/1/'
+						if (data['code'] === '0') {
+							console.log(data)
+							window.location.reload()
+						} else {
+							alert(data['msg'])
+						}
 					})
 				}, function(){
 					alert('操作失败了')

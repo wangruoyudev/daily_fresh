@@ -12,6 +12,7 @@ from django.db import transaction
 from alipay import AliPay
 import os
 from django.conf import settings
+import time
 # Create your views here.
 
 
@@ -215,6 +216,14 @@ class AliPayView(View):
         return JsonResponse(context)
 
 
+def create_return_ajax(status, code, msg):
+    return {
+        'ret': status,
+        'code': code,
+        'msg': msg,
+    }
+
+
 class QueryTradeStatus(View):
     def get(self, request):
         if not request.user.is_authenticated:
@@ -242,10 +251,15 @@ class QueryTradeStatus(View):
         for i in range(3):
             ret = alipay.api_alipay_trade_query(out_trade_no=pay_order.order_id)
             print('===>query-alipay-ret:', ret)
-            import time
-            time.sleep(10)
+            if ret['code'] == '10000' and ret['msg'] == 'Success' and ret['trade_status'] == 'TRADE_SUCCESS':
+                pay_order.order_status = 4
+                pay_order.trade_no = ret['trade_no']
+                pay_order.save()
+                return JsonResponse(create_return_ajax('success', '0', '付款成功'))
+            else:
+                time.sleep(10)
+                continue
 
-        context = {'ret': 'success', 'msg': '查询成功'}
-        return JsonResponse(context)
+        return JsonResponse(create_return_ajax('failed', '3', '付款失败'))
 
 
