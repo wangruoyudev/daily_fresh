@@ -187,7 +187,7 @@ class AliPayView(View):
         print('======>order_id:', order_id)
 
         try:
-            pay_order = OrderInfo.objects.get(order_id=order_id, pay_method=3, order_status=1)
+            pay_order = OrderInfo.objects.get(order_id=order_id, order_status=1)  # pay_method=3
         except OrderInfo.DoesNotExist:
             return JsonResponse(create_fail_msg('该订单不存在或无法支付'))
 
@@ -248,7 +248,7 @@ class QueryTradeStatus(View):
             sign_type="RSA2",  # RSA 或者 RSA2
             debug=True,  # 默认False
         )
-        for i in range(3):
+        for i in range(12):
             ret = alipay.api_alipay_trade_query(out_trade_no=pay_order.order_id)
             print('===>query-alipay-ret:', ret)
             if ret['code'] == '10000' and ret['msg'] == 'Success' and ret['trade_status'] == 'TRADE_SUCCESS':

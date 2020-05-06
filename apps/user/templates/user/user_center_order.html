@@ -97,7 +97,7 @@
 				$.post(url, param, function (data) {
 					console.log(data)
 					if(data['ret'] === 'failed') {
-						failFun()
+						failFun(data)
 					}else if (data['ret'] === 'success'){
 						successFun(data)
 					}
