@@ -8,7 +8,7 @@
 		<li class="col02">订单号：{{evaluate_order.order_id}}</li>
 		<li class="col02 stress">{{evaluate_order.payment_status}}</li>
 	</ul>
-  <form action="{% url 'order:evaluate_order' %}" method="POST">
+  <form action="" method="POST">
     {% csrf_token %}
     <input type="hidden" name='order_id' value="{{evaluate_order.order_id}}">
     <input type="hidden" name='total_count' value="{{evaluate_order.ordergoods_set.all|length}}">
