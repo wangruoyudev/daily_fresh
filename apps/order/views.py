@@ -186,7 +186,7 @@ class AliPayView(View):
         print('======>order_id:', order_id)
 
         try:
-            pay_order = OrderInfo.objects.get(order_id=order_id)
+            pay_order = OrderInfo.objects.get(order_id=order_id, pay_method=3, order_status=1)
         except OrderInfo.DoesNotExist:
             return JsonResponse(create_fail_msg('该订单不存在'))
 
@@ -213,3 +213,39 @@ class AliPayView(View):
 
         context = {'ret': 'success', 'msg': '提交成功', 'ali_url': ali_url}
         return JsonResponse(context)
+
+
+class QueryTradeStatus(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return JsonResponse(create_fail_msg('用户未登录'))
+
+        order_id = request.GET.get('order_id', None)
+        if order_id is None:
+            return JsonResponse(create_fail_msg('订单无效'))
+
+        print('======>order_id:', order_id)
+
+        try:
+            pay_order = OrderInfo.objects.get(order_id=order_id, pay_method=3)
+        except OrderInfo.DoesNotExist:
+            return JsonResponse(create_fail_msg('该订单不存在'))
+        alipay = AliPay(
+            appid="2016102300743845",
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=app_private_key_string,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=alipay_public_key_string,
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True,  # 默认False
+        )
+        for i in range(3):
+            ret = alipay.api_alipay_trade_query(out_trade_no=pay_order.order_id)
+            print('===>query-alipay-ret:', ret)
+            import time
+            time.sleep(10)
+
+        context = {'ret': 'success', 'msg': '查询成功'}
+        return JsonResponse(context)
+
+
