@@ -236,7 +236,7 @@ class QueryTradeStatus(View):
         print('======>order_id:', order_id)
 
         try:
-            pay_order = OrderInfo.objects.get(order_id=order_id, pay_method=3)
+            pay_order = OrderInfo.objects.get(order_id=order_id)
         except OrderInfo.DoesNotExist:
             return JsonResponse(create_fail_msg('该订单不存在'))
         alipay = AliPay(
