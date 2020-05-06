@@ -12,7 +12,7 @@
   <form action="{% url 'order:evaluate_order' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name='order_id' value="{{evaluate_order.order_id}}">
-    <input type="hidden" name='total_count' value="{{evaluate_order.ordergoods_set.all | LENGTH}}">
+    <input type="hidden" name='total_count' value="{{evaluate_order.ordergoods_set.all|length}}">
     {% for order_goods in evaluate_order.ordergoods_set.all %}
     <div style="margin-bottom:40px;">
       <table class="order_list_table w980">
