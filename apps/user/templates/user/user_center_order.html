@@ -25,7 +25,15 @@
 				</td>
 				<td width="15%">{{order_info.total_price}}元</td>
 				<td width="15%">{{order_info.payment_status}}</td>
-				<td width="15%"><a href="#" orderId="{{order_info.order_id}}" class="oper_btn">去付款</a></td>
+				<td width="15%">
+					<a href="#" orderId="{{order_info.order_id}}" class="oper_btn">
+					{% if order_info.order_status == 4 %}
+						去评价
+					{% else %}
+						去付款
+					{% endif %}
+					</a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -64,14 +72,13 @@
 					window.open(data['ali_url'])
 					$.get('/order/query_order/', param, function(data){
 						if (data['code'] === '0') {
-							console.log(data)
 							window.location.reload()
 						} else {
 							alert(data['msg'])
 						}
 					})
-				}, function(){
-					alert('操作失败了')
+				}, function(data){
+					alert(data['msg'])
 				})
 			})
 			function csrfSafeMethod(method) {

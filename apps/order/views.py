@@ -189,7 +189,7 @@ class AliPayView(View):
         try:
             pay_order = OrderInfo.objects.get(order_id=order_id, pay_method=3, order_status=1)
         except OrderInfo.DoesNotExist:
-            return JsonResponse(create_fail_msg('该订单不存在'))
+            return JsonResponse(create_fail_msg('该订单不存在或无法支付'))
 
         print('====>pay_order', pay_order)
 
