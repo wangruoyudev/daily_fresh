@@ -66,7 +66,8 @@
 		$(function(){
 			$('.oper_btn').click(function(){
 				console.log('===>order_status:' + $(this).attr('order_status'))
-				if ($(this).attr('order_status') === 1) {
+				console.log(typeof($(this).attr('order_status')))
+				if ($(this).attr('order_status') === '1') {
 					var self = $(this)
 					var param = {
 						'order_id': $(this).attr('orderId')
@@ -84,7 +85,7 @@
 					}, function(data){
 						alert(data['msg'])
 					})
-				} else if ($(this).attr('order_status') === 4) {
+				} else if ($(this).attr('order_status') === '4') {
 						location.href = '/order/evaluate_order/' + '?order_id=' + $(this).attr('orderId')
 				}
 			})
