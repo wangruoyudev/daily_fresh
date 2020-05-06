@@ -265,6 +265,7 @@ class QueryTradeStatus(View):
 
 class OrderEvaluate(View):
     def get(self, request, order_id):
+        print('2222')
         print('====>order_id:', order_id)
         try:
             evaluate_order = OrderInfo.objects.get(order_id=order_id)
@@ -274,6 +275,8 @@ class OrderEvaluate(View):
         context = {
             'evaluate_order': evaluate_order,
         }
+        print(evaluate_order)
+        print('1111111111')
         return render(request, 'user/user_order_comment.html', context)
 
     def post(self, request):
