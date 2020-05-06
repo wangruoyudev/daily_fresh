@@ -65,6 +65,7 @@
 	<script type="text/javascript">
 		$(function(){
 			$('.oper_btn').click(function(){
+				console.log('===>order_status:' + $(this).attr('order_status'))
 				if ($(this).attr('order_status') === 1) {
 					var self = $(this)
 					var param = {
