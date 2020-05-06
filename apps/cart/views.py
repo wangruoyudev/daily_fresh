@@ -32,25 +32,36 @@ class CartInfoView(LoginRequiredMixin, View):
         return render(request, 'cart/cart.html', context)
 
 
+def failed_msg(code, msg):
+    return {
+        'ret': 'failed',
+        'code': code,
+        'msg': msg,
+    }
+
+
 class UpdateCartView(View):
     def post(self, request):
         context = {
             'ret': 'failed'
         }
-        if request.user.is_authenticated:
-            goods_id = request.POST.get('cart_goods_id', None)
-            goods_count = request.POST.get('cart_goods_count', None)
-            print('===>goods_id:', goods_id)
-            print('==>DelCartView-post:', request.POST)
-            try:
-                goods_count = int(goods_count)
-            except ValueError:
-                goods_count = None
-            if goods_id is not None and goods_count is not None:
-                cart_key = 'cart_id%s' % request.user.id
-                conn = get_redis_connection('default')
-                conn.hset(cart_key, goods_id, goods_count)
-                context.update(ret='success')
+
+        if not request.user.is_authenticated:
+            return JsonResponse(failed_msg('1', '用户未登录'))
+
+        goods_id = request.POST.get('cart_goods_id', None)
+        goods_count = request.POST.get('cart_goods_count', None)
+        print('===>goods_id:', goods_id)
+        print('==>DelCartView-post:', request.POST)
+        try:
+            goods_count = int(goods_count)
+        except ValueError:
+            goods_count = None
+        if goods_id is not None and goods_count is not None:
+            cart_key = 'cart_id%s' % request.user.id
+            conn = get_redis_connection('default')
+            conn.hset(cart_key, goods_id, goods_count)
+            context.update(ret='success')
 
         return JsonResponse(context)
 

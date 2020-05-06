@@ -116,6 +116,14 @@ class GoodsTypeListView(View):
         return render(request, 'goods/list.html', context)
 
 
+def failed_msg(code, msg):
+    return {
+        'ret': 'failed',
+        'code': code,
+        'msg': msg,
+    }
+
+
 class AddCartView(View):
     '''没比较存库量，后续要处理一下，还有订单并发'''
     def post(self, request):
@@ -123,21 +131,25 @@ class AddCartView(View):
         add_count = request.POST.get('add_count', 0)
         print('===>goods_id:', goods_id)
         print('===>add_count:', add_count)
+
         if goods_id is None:
-            return redirect(reverse('goods:index'))
+            return JsonResponse(failed_msg('2', '商品ID缺失'))
         cart_count = 0
-        if request.user.is_authenticated:  # 读取缓存中购物车的记录
-            con = get_redis_connection('default')
-            cart_key = 'cart_id%s' % request.user.id
+        if not request.user.is_authenticated:
+            return JsonResponse(failed_msg('1', '用户未登录'))
 
-            goods_field = con.hget(cart_key, goods_id) # 先读取，加一后再写进去,如果field找不到就直接写1
-            print('====>goods_field:', goods_field)
-            if goods_field:
-                con.hset(cart_key, goods_id, int(goods_field) + int(add_count))
-            else:
-                con.hset(cart_key, goods_id, add_count)
+        # todo 读取缓存中购物车的记录
+        con = get_redis_connection('default')
+        cart_key = 'cart_id%s' % request.user.id
 
-            cart_count = con.hlen(cart_key)  # 最后再读取一次返回
+        goods_field = con.hget(cart_key, goods_id) # 先读取，加一后再写进去,如果field找不到就直接写1
+        print('====>goods_field:', goods_field)
+        if goods_field:
+            con.hset(cart_key, goods_id, int(goods_field) + int(add_count))
+        else:
+            con.hset(cart_key, goods_id, add_count)
+
+        cart_count = con.hlen(cart_key)  # 最后再读取一次返回
 
         json_data = {'goods_count': cart_count}
 

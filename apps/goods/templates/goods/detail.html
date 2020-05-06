@@ -138,6 +138,10 @@
 				'add_count': $('.num_show').val()
 			}, function (data) {
 				console.log('====>jsondata:')
+				if (data['ret'] === 'failed' && data['code'] === '1') {
+					location.href = '/user/login/'
+					return
+				}
 				console.log(data)
 				$('#show_count').html(data.goods_count);
 			})
