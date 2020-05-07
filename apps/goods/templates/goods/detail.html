@@ -66,7 +66,7 @@
 			<div class="tab_evaluate">
 				{% for evaluate_good in evaluate_goods %}
 				<div class="evaluate_box">
-					<span>评价时间:{{evaluate_good.create_time}}</span></br>
+					<span>评价时间:{{evaluate_good.update_time}}</span></br>
 					<span>{{evaluate_good.comment}}</span>
 				</div>
 				{% endfor %}
@@ -84,6 +84,7 @@
 {% csrf_token %}
 	<script type="text/javascript">
 	$(function ($){
+			$('.tab_evaluate').hide()
 			var price = $('.show_pirze').children('em').text()
 			price = parseFloat(price)
 			var count = $('.num_show').val()
