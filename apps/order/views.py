@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from apps.goods.models import GoodsSKU
@@ -278,10 +278,28 @@ class OrderEvaluate(View):
 
     def post(self, request, order_id):
         print('====>OrderEvaluate-post:', request.POST)
-        order_id = request.POST.get('order_id', None)
         if order_id is None:
             return HttpResponse('出错了-订单号为空')
 
-        return HttpResponse('出错了')
+        total_count = request.POST['total_count']
+        total_count = int(total_count)
+
+        for i in range(1, total_count+1):
+            order_goods_id = request.POST.get('order_goods_id_%s' % i)
+            try:
+                order_goods = OrderGoods.objects.get(id=order_goods_id)
+            except OrderGoods.DoesNotExist:
+                continue
+            order_goods.comment = request.POST.get('content_%s' % i)
+            order_goods.save()
+
+        try:
+            evaluate_order = OrderInfo.objects.get(order_id=order_id)
+        except OrderInfo.DoesNotExist:
+            return HttpResponse('出错了-订单不存在')
+
+        evaluate_order.order_status = 5
+        evaluate_order.save()
+        return redirect(reverse('user:order', [1, ]))
 
 
