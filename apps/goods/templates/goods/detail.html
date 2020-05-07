@@ -161,5 +161,19 @@
 					});
 			})
 		})
+		$('.goods_detail').click(function(){
+			console.log(11111)
+			$('.tab_evaluate').hide()
+			$('.tab_content').show()
+			$(this).addClass('active')
+			$('.goods_evaluate').removeClass('active')
+		})
+		$('.goods_evaluate').click(function(){
+			console.log(22222)
+			$('.tab_content').hide()
+			$('.tab_evaluate').show()
+			$(this).addClass('active')
+			$('.goods_detail').removeClass('active')
+		})
 	</script>
 {% endblock bottomfiles %}
