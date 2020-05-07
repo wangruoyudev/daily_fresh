@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # 'apps.goods.apps.GoodsConfig',
     # 'apps.order.apps.OrderConfig',
     # 'apps.user.apps.UserConfig',
+    'haystack',
     'apps.user',
     'apps.cart',
     'apps.goods',
@@ -187,3 +188,12 @@ CUSTOM_STORAGE_OPTIONS = {
 }
 
 CSRF_USE_SESSIONS = True
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
