@@ -33,14 +33,16 @@
 			<ul class="goods_type_list clearfix">
 			{% for goods_sku in page.object_list %}
 				<li>
-					<a href="{% url 'goods:detail' goods_sku.id %}"><img src="{{goods_sku.image.url}}"></a>
-					<h4><a href="{% url 'goods:detail' goods_sku.id %}">{{goods_sku.name}}</a></h4>
+					<a href="{% url 'goods:detail' goods_sku.object.id %}"><img src="{{goods_sku.object.image.url}}"></a>
+					<h4><a href="{% url 'goods:detail' goods_sku.object.id %}">{{goods_sku.object.name}}</a></h4>
 					<div class="operate">
-						<span class="prize">￥{{goods_sku.price}}</span>
-						<span class="unit">{{goods_sku.price}}/{{goods_sku.unite}}</span>
+						<span class="prize">￥{{goods_sku.object.price}}</span>
+						<span class="unit">{{goods_sku.object.price}}/{{goods_sku.object.unite}}</span>
 						<a href="#" class="add_goods" title="加入购物车"></a>
 					</div>
 				</li>
+      {% empty %}
+        <p>No results found.</p>
 			{% endfor %}
 			</ul>
 			<div class="pagenation">
