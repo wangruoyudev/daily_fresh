@@ -300,6 +300,6 @@ class OrderEvaluate(View):
 
         evaluate_order.order_status = 5
         evaluate_order.save()
-        return redirect(reverse('user:order', [1, ]))
+        return redirect(reverse('user:order', args=[1]))
 
 
