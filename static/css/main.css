@@ -663,3 +663,9 @@ html,body{height:100%}
 	justify-content: center;
 	margin-right: 15px;
 }
+
+.evaluate_box{
+	height: 70px;
+	margin: 10PX;
+	border: 1px solid #B8B8B8;
+}

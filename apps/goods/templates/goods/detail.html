@@ -53,8 +53,8 @@
 
 		<div class="r_wrap fr clearfix">
 			<ul class="detail_tab clearfix">
-				<li class="active">商品介绍</li>
-				<li>评论</li>
+				<li class="goods_detail active">商品介绍</li>
+				<li class="goods_evaluate">评论</li>
 			</ul>
 
 			<div class="tab_content">
@@ -63,7 +63,14 @@
 					<dd>{{goods_sku.goods.detail|safe}}</dd>
 				</dl>
 			</div>
-
+			<div class="tab_evaluate">
+				{% for evaluate_good in evaluate_goods %}
+				<div class="evaluate_box">
+					<span>评价时间:{{evaluate_good.create_time}}</span></br>
+					<span>{{evaluate_good.comment}}</span>
+				</div>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 	<div class="for_goods_id">{{goods_sku.id}}</div>

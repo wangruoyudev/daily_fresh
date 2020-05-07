@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from apps.goods.models import GoodsSKU, GoodsType, GoodsImage, Goods, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
+from apps.order.models import OrderGoods
 from django.core.cache import cache
 from django_redis import get_redis_connection
 from django.core.paginator import Paginator, Page
@@ -61,10 +62,12 @@ class GoodsDetailView(View):
         new_goods_list = GoodsSKU.objects.all().exclude(id=goods_id).order_by('-create_time')[:2]
         type_goods_list = GoodsType.objects.all().order_by('id')
         goods_spu = goods_sku.goods
+        evaluate_goods = goods_sku.ordergoods_set.exclude(comment__exact='')
         context = {
             'goods_sku': goods_sku,
             'new_goods_list': new_goods_list,
             'type_goods_list': type_goods_list,
+            'evaluate_goods': evaluate_goods,
         }
         cart_count = 0
         if request.user.is_authenticated:  # 读取缓存中购物车的记录
