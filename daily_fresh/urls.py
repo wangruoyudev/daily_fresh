@@ -19,6 +19,7 @@ from django.conf.urls import include
 from apps.goods.views import RedirectIndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('search/', include('haystack.urls')),
     path('tinymce/', include('tinymce.urls')), # 富文本编辑器
     path('cart/', include('cart.urls')),
     path('goods/', include('goods.urls')),
