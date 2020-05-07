@@ -31,6 +31,8 @@
 <!--			</div>-->
 
 			<ul class="goods_type_list clearfix">
+        {{page|length}}
+        {{page.object_list|length}}
 			{% for goods_sku in page.object_list %}
 				<li>
 					<a href="{% url 'goods:detail' goods_sku.object.id %}"><img src="{{goods_sku.object.image.url}}"></a>
