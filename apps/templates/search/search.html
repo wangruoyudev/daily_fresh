@@ -31,8 +31,6 @@
 <!--			</div>-->
 
 			<ul class="goods_type_list clearfix">
-				{% highlight result.summary with query %}
-
 			{% for goods_sku in page.object_list %}
 				<li>
 					<a href="{% url 'goods:detail' goods_sku.object.id %}"><img src="{{goods_sku.object.image.url}}"></a>
@@ -48,11 +46,18 @@
 			{% endfor %}
 			</ul>
 			<div class="pagenation">
-				<a href="#">上一页</a>
-			{% for page_num in page.paginator.page_range %}
-				<a href="#" {% if page_num == page.number %}class="active"{% endif %}>{{page_num}}</a>
-			{% endfor %}
-				<a href="#">下一页></a>
+				{% if page.has_previous or page.has_next %}
+				<div>
+					{% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+					|
+					{% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+				</div>
+				{% endif %}
+<!--				<a href="#">上一页</a>-->
+<!--			{% for page_num in page.paginator.page_range %}-->
+<!--				<a href="#" {% if page_num == page.number %}class="active"{% endif %}>{{page_num}}</a>-->
+<!--			{% endfor %}-->
+<!--				<a href="#">下一页></a>-->
 			</div>
 		</div>
 	</div>
