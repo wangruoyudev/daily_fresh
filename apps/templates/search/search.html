@@ -31,7 +31,9 @@
 <!--			</div>-->
 
 			<ul class="goods_type_list clearfix">
+				{% highlight %}
         {{paginator.count}}
+				{% endhighlight %}
 
 			{% for goods_sku in page.object_list %}
 				<li>
