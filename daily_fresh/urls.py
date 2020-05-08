@@ -25,5 +25,5 @@ urlpatterns = [
     path('prefix/goods/', include('goods.urls')),
     path('prefix/order/', include('order.urls')),
     path('prefix/user/', include('user.urls')),
-    path('', RedirectIndexView.as_view()),
+    path('prefix/', RedirectIndexView.as_view()),
 ]
