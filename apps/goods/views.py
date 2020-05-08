@@ -8,6 +8,8 @@ from django_redis import get_redis_connection
 from django.core.paginator import Paginator, Page
 from django.contrib.sessions.backends.base import SessionBase
 from django.conf import settings
+from haystack.generic_views import SearchView
+import haystack.urls
 # Create your views here.
 
 
