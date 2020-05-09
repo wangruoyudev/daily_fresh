@@ -24,7 +24,7 @@
 				<div class="num_add fl">
 					<form action="{% url 'order:right_away_order' %}" method="post">
 					{% csrf_token %}
-						<input type="text" name="goods_id" value="{{goods_sku.id}}">
+						<input type="hidden" name="goods_id" value="{{goods_sku.id}}">
 						<input type="number" name="goods_count" class="num_show fl" value="1">
 					</form>
 					<a href="javascript:;" class="add fr">+</a>
