@@ -128,7 +128,12 @@ class SubmitOrderView(View):
 
             for cart_goods_id in goods_list:
                 for i in range(3):
-                    cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
+                    str_count = conn.hget(cart_key, cart_goods_id)
+                    if str_count:
+                        cart_goods_count = int(str_count)
+                    else:
+                        cart_goods_count = int(request.POST.getlist('goods_list', [])[0])
+                    # cart_goods_count = int(conn.hget(cart_key, cart_goods_id))
                     # goods_sku = GoodsSKU.objects.get(id=cart_goods_id)
                     # todo 悲观锁，这里会阻塞， 事务结束后会解阻塞
                     # goods_sku = GoodsSKU.objects.select_for_update().get(id=cart_goods_id)

@@ -88,10 +88,13 @@
 			var pay_style  = $("input[name='pay_style']:checked").val()
 			console.log(pay_style)
 			var goods_list = []
+			var goods_count_list = []
 			$('.goods_list_td').each(function(index, elem){
 				var goods_id = $(this).children('li.col01').attr('goods_id')
+				var goods_count = $(this).children('li.col06').text()
 				console.log(goods_id)
 				goods_list.push(goods_id)
+				goods_count_list.push(goods_count)
 			})
 			// var goods_id = $('.goods_list_td').children('.col01').attr('goods_id')
 			// console.log(goods_id)
@@ -99,7 +102,8 @@
 			var param = {
 				'address_id': address_id,
 				'pay_style': pay_style,
-				'goods_list': goods_list
+				'goods_list': goods_list,
+				'goods_count_list': goods_count_list
 			}
 			ajaxPost('/prefix/order/submit_order/', param, function(){
 				$('.popup_con').fadeIn('fast', function() {
