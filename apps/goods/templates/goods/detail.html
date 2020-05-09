@@ -22,14 +22,18 @@
 			<div class="goods_num clearfix">
 				<div class="num_name fl">数 量：</div>
 				<div class="num_add fl">
-					<input type="number" class="num_show fl" value="1">
+					<form action="{% url 'order:right_away_order' %}" method="post">
+					{% csrf_token %}
+						<input type="text" name="goods_id" value="{{goods_sku.id}}">
+						<input type="number" name="goods_count" class="num_show fl" value="1">
+					</form>
 					<a href="javascript:;" class="add fr">+</a>
 					<a href="javascript:;" class="minus fr">-</a>
 				</div>
 			</div>
 			<div class="total">总价：<em></em></div>
 			<div class="operate_btn">
-				<a href="javascript:;" class="buy_btn">立即购买</a>
+				<a href="javascript:buy_submit();" class="buy_btn">立即购买</a>
 				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
 			</div>
 		</div>
@@ -175,6 +179,9 @@
 			$('.tab_evaluate').show()
 			$(this).addClass('active')
 			$('.goods_detail').removeClass('active')
+		})
+		$('.buy_btn').click(function(){
+			$('form').submit()
 		})
 	</script>
 {% endblock bottomfiles %}

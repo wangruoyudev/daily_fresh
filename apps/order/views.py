@@ -45,6 +45,27 @@ class CreateOrderView(LoginRequiredMixin, View):
         return render(request, 'order/place_order.html', context)
 
 
+class OrderRightAwayView(LoginRequiredMixin, View):
+    def post(self, request):
+        goods_id = request.POST.get('goods_id')
+        count = request.POST.get('goods_count')
+        if not all([goods_id, count]):
+            return HttpResponse('出错了')
+
+        goods_sku_list = list()
+        goods_sku = GoodsSKU.objects.get(id=goods_id)
+        goods_sku.cart_goods_count = count
+        goods_sku_list.append(goods_sku)
+        try:
+            address_user = User.objects.get(id=request.user.id)
+            address = address_user.address_set.get(is_default=True)
+        except Address.DoesNotExist:
+            address = None
+        context = {'goods_sku_list': enumerate(goods_sku_list, start=1),
+                   'address': address}
+        return render(request, 'order/place_order.html', context)
+
+
 def create_fail_msg(msg):
     return {'ret': 'failed', 'msg': msg}
 
