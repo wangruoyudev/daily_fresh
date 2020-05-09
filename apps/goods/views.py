@@ -20,9 +20,9 @@ class RedirectIndexView(View):
 
 class IndexView(View):
     def get(self, request):
-        # if not request.user.is_authenticated: # 登录就返回index，没登录就返回index_static
-        #     print('====>返回静态的首页')
-        #     return render(request, 'index_static.html')
+        if not request.user.is_authenticated: # 登录就返回index，没登录就返回index_static
+            print('====>返回静态的首页')
+            return render(request, 'index_static.html')
 
         print('====>获取查询数据库的首页')
         context = cache.get('index_cache')
