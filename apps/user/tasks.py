@@ -45,9 +45,9 @@ def create_static_index_html(request):
 
 @shared_task
 def send_register_active_mail(receiver_list, user_name, token, host):
-    print('延时前')
-    time.sleep(5)
-    print('延时后')
+    # print('延时前')
+    # time.sleep(5)
+    print('开始执行发送邮件')
     subject = '欢迎注册快客金服'
     message = '12345'
     sender = settings.EMAIL_FROM

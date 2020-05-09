@@ -9,6 +9,10 @@ list1 = range(1, 10)
 for a in enumerate(list1, start=1):
     print(a)
 
+list1 = list()
+list1.append(1)
+list1.append(10)
+print(list1[0])
 
 # ORDER_STATUS_CHOICS = (
 #         (1, '待支付'),
