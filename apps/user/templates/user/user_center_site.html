@@ -61,8 +61,8 @@
 					var param = {
 						'address_id': ckeck_input.val()
 					}
-					ajaxPost('/user/address/set_default/', param, function(){
-						location.href = '/user/address'
+					ajaxPost('/prefix/user/address/set_default/', param, function(){
+						location.href = '/prefix/user/address'
 					}, function(){
 						alert('操作失败了')
 					})
@@ -78,7 +78,7 @@
 					'phone_num': $("input[name='phone_num']").val()
 				}
 				ajaxPost('', param, function(){
-					location.href = '/user/address'
+					location.href = '/prefix/user/address'
 				}, function(){
 					alert('操作失败了')
 				})

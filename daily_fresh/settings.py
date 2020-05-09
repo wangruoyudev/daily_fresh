@@ -146,6 +146,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+STATIC_ROOT = 
+
 TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
     'width': 600,
@@ -178,7 +180,7 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-LOGIN_URL = '/user/login'
+LOGIN_URL = '/prefix/user/login'
 
 
 DEFAULT_FILE_STORAGE = 'daily_fresh.Fdfs_storage.FdfsStorage'

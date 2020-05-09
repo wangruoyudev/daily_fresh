@@ -70,13 +70,13 @@
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
 						'cart_goods_count': count
 					}
-					ajaxPost('/cart/update/', param, function(){
+					ajaxPost('/prefix/cart/update/', param, function(){
 						self.next("input[type='number']").val(count)
 						tatol_price = count * price
 						tmp = $(this).parent('.num_add').parent('.col06').next('.col07').children('span').text(tatol_price.toFixed(2))
 						total_price()
 					}, function(){
-						location.href = '/goods/index'
+						location.href = '/prefix/goods/index'
 					})
 				})
 				$(this).children('.col06').find('.minus').click(function(){
@@ -89,13 +89,13 @@
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
 						'cart_goods_count': count
 					}
-					ajaxPost('/cart/update/', param, function(){
+					ajaxPost('/prefix/cart/update/', param, function(){
 						self.prev("input[type='number']").val(count)
 						tatol_price = count * price
 						tmp = self.parent('.num_add').parent('.col06').next('.col07').children('span').text(tatol_price.toFixed(2))
 						total_price()
 					}, function(){
-						location.href = '/goods/index'
+						location.href = '/prefix/goods/index'
 					})
 				})
 				var per_count
@@ -112,13 +112,13 @@
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text(),
 						'cart_goods_count': count
 					}
-					ajaxPost('/cart/update/', param, function(){
+					ajaxPost('/prefix/cart/update/', param, function(){
 						self.val(count)
 						tatol_price = parseInt(count) * price
 						self.parents('li.col06').next().children('span').text(tatol_price.toFixed(2))
 						total_price()
 					}, function(){
-						location.href = '/goods/index'
+						location.href = '/prefix/goods/index'
 					})
 				})
 				$(this).children('.col01').children("input[type='checkbox']").change(function() {
@@ -131,11 +131,11 @@
 					var param = {
 						'cart_goods_id': $('.cart_list_td').eq(index).children('#for_goods_id').text()
 					}
-					ajaxPost('/cart/cart_del/', param, function(){
+					ajaxPost('/prefix/cart/cart_del/', param, function(){
 						self.parents('ul').remove()
 						total_price()
 					}, function(){
-						location.href = '/goods/index'
+						location.href = '/prefix/goods/index'
 					})
 				})
 			})

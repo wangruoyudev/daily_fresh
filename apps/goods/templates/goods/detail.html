@@ -141,13 +141,13 @@
 							}
 					}
 			});
-			$.post('/goods/add_cart/', {
+			$.post('/prefix/goods/add_cart/', {
 					'goods_id': $('.for_goods_id').text(),
 					'add_count': $('.num_show').val()
 				}, function (data) {
 					console.log('====>jsondata:')
 					if (data['ret'] === 'failed' && data['code'] === '1') {
-						location.href = '/user/login/'
+						location.href = '/prefix/user/login/'
 						return
 					}
 					console.log(data)

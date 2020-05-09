@@ -72,10 +72,10 @@
 					var param = {
 						'order_id': $(this).attr('orderId')
 					}
-					ajaxPost('/order/pay_order/', param, function(data){
+					ajaxPost('/prefix/order/pay_order/', param, function(data){
 						console.log(data)
 						window.open(data['ali_url'])
-						$.get('/order/query_order/', param, function(data){
+						$.get('/prefix/order/query_order/', param, function(data){
 							if (data['code'] === '0') {
 								window.location.reload()
 							} else {
@@ -86,7 +86,7 @@
 						alert(data['msg'])
 					})
 				} else if ($(this).attr('order_status') === '4') {
-						location.href = '/order/evaluate_order/' + $(this).attr('orderId') + '/'
+						location.href = '/prefix/order/evaluate_order/' + $(this).attr('orderId') + '/'
 				}
 			})
 			function csrfSafeMethod(method) {
