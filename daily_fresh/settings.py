@@ -146,7 +146,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-STATIC_ROOT = 
+STATIC_ROOT = '/usr/wry/django/daily_fresh_dev/www'
 
 TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
